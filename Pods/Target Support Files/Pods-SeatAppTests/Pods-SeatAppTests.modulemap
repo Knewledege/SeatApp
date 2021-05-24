@@ -1,0 +1,6 @@
+framework module Pods_SeatAppTests {
+  umbrella header "Pods-SeatAppTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

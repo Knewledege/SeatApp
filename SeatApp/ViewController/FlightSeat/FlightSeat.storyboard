@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="P19-qO-e43">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Flight Seat View Controller-->
+        <scene sceneID="AjO-cB-KsL">
+            <objects>
+                <viewController storyboardIdentifier="FlightSeatViewController" id="P19-qO-e43" customClass="FlightSeatViewController" customModule="SeatApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Y8o-Pa-Cec">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CrL-nm-cwz">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <collectionViewLayout key="collectionViewLayout" id="MIW-iI-oqP"/>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="CrL-nm-cwz" firstAttribute="trailing" secondItem="Vvg-e8-ssf" secondAttribute="trailing" id="7vm-cj-NPV"/>
+                            <constraint firstItem="CrL-nm-cwz" firstAttribute="leading" secondItem="Vvg-e8-ssf" secondAttribute="leading" id="J4a-Kc-QFb"/>
+                            <constraint firstItem="CrL-nm-cwz" firstAttribute="top" secondItem="Vvg-e8-ssf" secondAttribute="top" id="gG0-eN-snA"/>
+                            <constraint firstAttribute="bottom" secondItem="CrL-nm-cwz" secondAttribute="bottom" constant="34" id="i1T-ny-ojA"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Vvg-e8-ssf"/>
+                    </view>
+                    <connections>
+                        <outlet property="flightSeatCollectionView" destination="CrL-nm-cwz" id="cRZ-Xf-yIK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="niu-KD-f1H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="131.8840579710145" y="11.383928571428571"/>
+        </scene>
+    </scenes>
+</document>

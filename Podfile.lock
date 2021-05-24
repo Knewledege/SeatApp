@@ -1,0 +1,34 @@
+PODS:
+  - GRDB.swift (5.7.4):
+    - GRDB.swift/standard (= 5.7.4)
+  - GRDB.swift/standard (5.7.4)
+  - PromiseKit (6.13.1):
+    - PromiseKit/CorePromise (= 6.13.1)
+    - PromiseKit/Foundation (= 6.13.1)
+    - PromiseKit/UIKit (= 6.13.1)
+  - PromiseKit/CorePromise (6.13.1)
+  - PromiseKit/Foundation (6.13.1):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.13.1):
+    - PromiseKit/CorePromise
+  - SwiftLint (0.43.1)
+
+DEPENDENCIES:
+  - GRDB.swift
+  - PromiseKit (~> 6.8)
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - GRDB.swift
+    - PromiseKit
+    - SwiftLint
+
+SPEC CHECKSUMS:
+  GRDB.swift: 2064e726141f130d0b8bd819b29086f2b1157597
+  PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
+  SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
+
+PODFILE CHECKSUM: 71788f7b9e2e76a3fc760d331652017f0fcf8d31
+
+COCOAPODS: 1.10.0

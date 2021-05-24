@@ -150,8 +150,10 @@ extension FlightModel: FlightInput {
         self.customerName[sourceIndexPath.section][sourceIndexPath.row] = "none"
         if let sourceSeat = self.seatNumber.filter { $0.row == sourceIndexPath.section && $0.column == sourceIndexPath.row }.first?.seatNumber,
            let destinationSeat = self.seatNumber.filter { $0.row == destinationIndexPath.section && $0.column == destinationIndexPath.row }.first?.seatNumber {
-            if let customer = self.customers.filter { $0.seatNumber == sourceSeat }.first {
-                self.changeCustomers[customer.id-1].seatNumber = destinationSeat
+            self.customers.enumerated().forEach { i, value in
+                if value.seatNumber == sourceSeat {
+                    self.changeCustomers[i].seatNumber = destinationSeat
+                }
             }
         }
     }

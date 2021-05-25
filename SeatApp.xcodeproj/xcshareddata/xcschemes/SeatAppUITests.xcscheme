@@ -9,28 +9,14 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FFBB99BE264D175E007CB71A"
-               BuildableName = "SeatApp.app"
-               BlueprintName = "SeatApp"
-               ReferencedContainer = "container:SeatApp.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FFBB99D4264D1760007CB71A"
-               BuildableName = "SeatAppTests.xctest"
-               BlueprintName = "SeatAppTests"
+               BlueprintIdentifier = "FFBB99DF264D1760007CB71A"
+               BuildableName = "SeatAppUITests.xctest"
+               BlueprintName = "SeatAppUITests"
                ReferencedContainer = "container:SeatApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -41,19 +27,8 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      localizableStringsDataGatheringEnabled = "YES">
+      codeCoverageEnabled = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FFBB99D4264D1760007CB71A"
-               BuildableName = "SeatAppTests.xctest"
-               BlueprintName = "SeatAppTests"
-               ReferencedContainer = "container:SeatApp.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
@@ -76,16 +51,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FFBB99BE264D175E007CB71A"
-            BuildableName = "SeatApp.app"
-            BlueprintName = "SeatApp"
-            ReferencedContainer = "container:SeatApp.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -93,16 +58,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FFBB99BE264D175E007CB71A"
-            BuildableName = "SeatApp.app"
-            BlueprintName = "SeatApp"
+            BlueprintIdentifier = "FFBB99DF264D1760007CB71A"
+            BuildableName = "SeatAppUITests.xctest"
+            BlueprintName = "SeatAppUITests"
             ReferencedContainer = "container:SeatApp.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

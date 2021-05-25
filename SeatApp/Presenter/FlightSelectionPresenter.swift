@@ -21,13 +21,13 @@ internal class FlightSelectionPresenter {
     private var model: FlightInput?
     init(delegate: FlightSelectionOutput) {
         self.delegate = delegate
+        self.model = FlightModel()
     }
     deinit {
     }
 }
 extension FlightSelectionPresenter: FlightSelectionInput {
     func setFlightInfo() {
-        self.model = FlightModel()
         self.model?.getFlightInfo()
     }
     func setFlightName(row: Int) -> String{
@@ -38,7 +38,7 @@ extension FlightSelectionPresenter: FlightSelectionInput {
     }
     func setFlightDetails(id: Int){
         self.model?.getFlightCustomer(id: id + 1)
-        if let customers = self.model?.customerCount{
+        if let customers = self.model?.customerCount {
             let seats: Int = self.model?.flightInfo[id].seats ?? 0
             let seatsText = "座席数：" + String(seats) + "数"
             let customersText = "搭乗人数：" + String(customers) + "名"

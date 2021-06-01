@@ -8,7 +8,8 @@
 
 import UIKit
 extension UIImageView {
-    func imageConfigure(name: String) {
+    /// 画像とコンテンツモード設定
+    public func imageConfigure(name: String) {
         self.image = UIImage(named: name)
         self.contentMode = .scaleAspectFit
     }

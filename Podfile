@@ -4,9 +4,8 @@
 target 'SeatApp' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-  pod "PromiseKit", "~> 6.8"
-  pod 'SwiftLint'
-  pod 'GRDB.swift'
+  pod 'SwiftLint', '~> 0.43.1'
+  pod 'GRDB.swift', '~> 5.8.0'
 
 
   # Pods for SeatApp

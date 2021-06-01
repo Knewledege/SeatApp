@@ -1,5 +1,9 @@
 # SeatAPP
 座席編集アプリ  
+## 概要  
+Xcodeバージョン: 11.4  
+Simulators           : iPad Pro (3rd generations)  
+iOSバージョン    : 13.5  
   
 ## 主な機能  
 フライト情報の取得  

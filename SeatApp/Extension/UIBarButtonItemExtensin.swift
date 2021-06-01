@@ -8,7 +8,8 @@
 
 import UIKit
 extension UIBarButtonItem {
-    func constraintsConfigure(widthCnstant width: CGFloat, heightConstant height: CGFloat) {
+    /// AutoLayout
+    public func constraintsConfigure(widthCnstant width: CGFloat, heightConstant height: CGFloat) {
         self.customView?.widthAnchor.constraint(equalToConstant: width).isActive = true
         self.customView?.heightAnchor.constraint(equalToConstant: height).isActive = true
     }

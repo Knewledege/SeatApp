@@ -8,7 +8,8 @@
 
 import UIKit
 extension UIButton {
-    func buttonConfigure(imageName: String, target: Any, action: Selector){
+    /// ボタンの背景画像とイベント設定
+    public func buttonConfigure(imageName: String, target: Any, action: Selector) {
         self.setImage(UIImage(named: imageName), for: .normal)
         self.addTarget(target, action: action, for: .touchUpInside)
     }

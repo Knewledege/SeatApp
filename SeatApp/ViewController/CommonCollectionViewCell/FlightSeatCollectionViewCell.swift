@@ -9,14 +9,13 @@
 import UIKit
 
 class FlightSeatCollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet internal weak var contentImage: UIImageView!
-    @IBOutlet internal weak var rowLabel: UILabel!
+    @IBOutlet private weak var contentImage: UIImageView!
+    @IBOutlet private weak var rowLabel: UILabel!
     static let className = "FlightSeatCollectionViewCell"
+
     override func awakeFromNib() {
         super.awakeFromNib()
         contentImage.contentMode = .scaleAspectFit
-        
     }
     override func prepareForReuse() {
         super.prepareForReuse()

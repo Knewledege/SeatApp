@@ -14,13 +14,14 @@ struct FlightInfo: Codable, FetchableRecord, PersistableRecord {
     var seats: Int
     var flightName: String
     static var databaseTableName: String {
-        return "FL_INFO"
+        "FL_INFO"
     }
+
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case flightID = "flightID"
-        case seats = "seats"
-        case flightName = "flightName"
+        case id
+        case flightID
+        case seats
+        case flightName
     }
 }
 struct ConfigurationInfo: Codable, FetchableRecord, PersistableRecord {
@@ -30,14 +31,15 @@ struct ConfigurationInfo: Codable, FetchableRecord, PersistableRecord {
     var rowSeats: Int
     var columnSeats: Int
     static var databaseTableName: String {
-        return "CONF_INFO"
+        "CONF_INFO"
     }
+
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case configurationInfoID = "configurationInfoID"
-        case flightInfoID = "flightInfoID"
-        case rowSeats = "rowSeats"
-        case columnSeats = "columnSeats"
+        case id
+        case configurationInfoID
+        case flightInfoID
+        case rowSeats
+        case columnSeats
     }
 }
 struct LoInfo: Codable, FetchableRecord, PersistableRecord {
@@ -47,14 +49,15 @@ struct LoInfo: Codable, FetchableRecord, PersistableRecord {
     var row: Int?
     var column: Int?
     static var databaseTableName: String {
-        return "LO_INFO"
+        "LO_INFO"
     }
+
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case configurationID = "configurationID"
-        case type = "type"
-        case row = "row"
-        case column = "column"
+        case id
+        case configurationID
+        case type
+        case row
+        case column
     }
 }
 struct SeatNumber: Codable, FetchableRecord, PersistableRecord {
@@ -64,14 +67,15 @@ struct SeatNumber: Codable, FetchableRecord, PersistableRecord {
     var row: Int
     var column: Int
     static var databaseTableName: String {
-        return "SEAT_NO"
+        "SEAT_NO"
     }
+
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case configurationID = "configurationID"
-        case seatNumber = "seatNumber"
-        case row = "row"
-        case column = "column"
+        case id
+        case configurationID
+        case seatNumber
+        case row
+        case column
     }
 }
 struct Customer: Codable, FetchableRecord, PersistableRecord {
@@ -82,14 +86,15 @@ struct Customer: Codable, FetchableRecord, PersistableRecord {
     var age: Int
     var name: String
     static var databaseTableName: String {
-        return "CUSTOMER"
+        "CUSTOMER"
     }
+
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case flightID = "flightID"
-        case seatNumber = "seatNumber"
-        case gender = "gender"
-        case age = "age"
-        case name = "name"
+        case id
+        case flightID
+        case seatNumber
+        case gender
+        case age
+        case name
     }
 }

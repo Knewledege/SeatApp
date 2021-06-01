@@ -7,18 +7,19 @@
 //
 
 import Foundation
-public protocol FlightSelectionInput {
+protocol FlightSelectionInput {
     func setFlightInfo()
     func setFlightName(row: Int) -> String
     func setFlightDetails(id: Int)
     func setFlightCount() -> Int
 }
-public protocol FlightSelectionOutput: AnyObject {
+protocol FlightSelectionOutput: AnyObject {
     func setTextView(text: String)
 }
 internal class FlightSelectionPresenter {
     private weak var delegate: FlightSelectionOutput?
     private var model: FlightInput?
+
     init(delegate: FlightSelectionOutput) {
         self.delegate = delegate
         self.model = FlightModel()
@@ -27,16 +28,17 @@ internal class FlightSelectionPresenter {
     }
 }
 extension FlightSelectionPresenter: FlightSelectionInput {
+    ///
     func setFlightInfo() {
         self.model?.getFlightInfo()
     }
-    func setFlightName(row: Int) -> String{
-        return self.model?.flightInfo[row].flightName ?? ""
+    func setFlightName(row: Int) -> String {
+        self.model?.flightInfo[row].flightName ?? ""
     }
-    func setFlightCount() -> Int{
-        return self.model?.flightInfo.count ?? 0
+    func setFlightCount() -> Int {
+        self.model?.flightInfo.count ?? 0
     }
-    func setFlightDetails(id: Int){
+    func setFlightDetails(id: Int) {
         self.model?.getFlightCustomer(id: id + 1)
         if let customers = self.model?.customerCount {
             let seats: Int = self.model?.flightInfo[id].seats ?? 0

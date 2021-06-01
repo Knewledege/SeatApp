@@ -12,7 +12,7 @@ protocol FlightSeatInput {
     func getSeatColumn() -> Int
     func getSeatRow(id: Int) -> Int
     func getSeatNumber(section: Int, row: Int) -> String
-    func getSeatName(section: Int, row: Int) -> String 
+    func getSeatName(section: Int, row: Int) -> String
 }
 protocol FlightSeatOutput: AnyObject {
     func setLeftBarButtonItem(title: String)
@@ -20,38 +20,48 @@ protocol FlightSeatOutput: AnyObject {
 class FlightSeatPresenter {
     private weak var delegate: FlightSeatOutput?
     private var model: FlightInput?
+
     init(delegate: FlightSeatOutput) {
         self.delegate = delegate
     }
 }
 extension FlightSeatPresenter: FlightSeatInput {
-    func getFlightName(id: Int){
+    func getFlightName(id: Int) {
         self.model = FlightModel()
+        // 便名取得
         self.model?.getFlightNameByID(id: id)
+        // 座席情報テーブル取得
         self.model?.getFlightConfigurationByID(id: id)
+        // 座席画像及び顧客名取得
         self.model?.getFlightSeatArray(id: id)
-        if let flightName = self.model?.flightInfo.first?.flightName{
+        // 便名表示に表示するタイトル指定
+        if let flightName = self.model?.flightInfo.first?.flightName {
             let title = "便名：" + flightName
             self.delegate?.setLeftBarButtonItem(title: title)
         }
     }
-    func getSeatColumn() -> Int{
-        if let column = self.model?.configurationInfo?.columnSeats{
+    /// コレクションビューのセルの列数
+    func getSeatColumn() -> Int {
+        if let column = self.model?.configurationInfo?.columnSeats {
+            // 座席行表示欄もあるためプラス１
             return column + 1
         }
         return 0
     }
+    /// コレクションビューのセルの行数
     func getSeatRow(id: Int) -> Int {
-
-        if let row = self.model?.configurationInfo?.rowSeats{
+        if let row = self.model?.configurationInfo?.rowSeats {
+            // 座席列表示欄もあるためプラス１
             return row + 1
         }
         return 0
     }
+    /// 座席表示画像名取得
     func getSeatNumber(section: Int, row: Int) -> String {
-        return self.model?.seatImage[section][row] ?? "lo"
+        self.model?.seatImage[section][row] ?? "lo"
     }
+    /// 座席表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String {
-        return self.model?.customerName[section][row] ?? "none"
+        self.model?.customerName[section][row] ?? "none"
     }
 }

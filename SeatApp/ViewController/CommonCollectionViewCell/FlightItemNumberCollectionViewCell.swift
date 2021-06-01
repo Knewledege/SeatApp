@@ -10,8 +10,9 @@ import UIKit
 
 class FlightItemNumberCollectionViewCell: UICollectionViewCell {
     static let className: String = "FlightItemNumberCollectionViewCell"
-    @IBOutlet internal weak var contentImage: UIImageView!
-    @IBOutlet internal weak var numberLabel: UILabel!
+    @IBOutlet private weak var contentImage: UIImageView!
+    @IBOutlet private weak var numberLabel: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -23,16 +24,16 @@ class FlightItemNumberCollectionViewCell: UICollectionViewCell {
            contentImage.image = nil
            numberLabel.text = nil
        }
-       
-       internal func imageConfigure(name: String){
+
+       internal func imageConfigure(name: String) {
            if name != "none" {
                contentImage.imageConfigure(name: name)
            }
        }
-       internal func cellBackgroundColor(color: UIColor){
+       internal func cellBackgroundColor(color: UIColor) {
            self.backgroundColor = color
        }
-       internal func rowLabelConfigure(text: String){
+       internal func rowLabelConfigure(text: String) {
            if text != "none" {
                numberLabel.text = text
            }

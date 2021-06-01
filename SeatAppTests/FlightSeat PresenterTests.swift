@@ -31,20 +31,8 @@ class FlightSeatTests: XCTestCase {
     }
     func testFlightSeat() {
         let mockViewController = MockFlightSeatViewController()
-        let presenter = MockFlightSelectionPresenter(delegate: mockViewController)
-
-        presenter.setFlightInfo()
-
-        mockViewController.flightName = presenter.setFlightName(row: 0)
-        XCTAssertEqual(mockViewController.flightName, "testFlight001")
-
-        mockViewController.flightCount = presenter.setFlightCount()
-        XCTAssertEqual(mockViewController.flightCount, 2)
-
-        presenter.setFlightDetails(id: 0)
-        XCTAssertEqual(mockViewController.flightDetails, "座席数：10数\n搭乗人数：2名")
+        let presenter = MockFlightSeatPresenter(delegate: mockViewController)
     }
-
 }
 class MockFlightSeatViewController: FlightSeatOutput {
     var flightName = ""
@@ -63,7 +51,6 @@ class MockFlightSeatPresenter: FlightSeatInput {
            self.model = MockFlightModel()
     }
     func getFlightName(id: Int){
-        self.model = FlightModel()
         self.model?.getFlightNameByID(id: id)
         self.model?.getFlightConfigurationByID(id: id)
         self.model?.getFlightSeatArray(id: id)
@@ -79,7 +66,6 @@ class MockFlightSeatPresenter: FlightSeatInput {
         return 0
     }
     func getSeatRow(id: Int) -> Int {
-
         if let row = self.model?.configurationInfo?.rowSeats{
             return row + 1
         }

@@ -1,4 +1,3 @@
-//
 //  UIColorExtension.swift
 //  SeatApp
 //
@@ -9,7 +8,7 @@
 import UIKit
 extension UIColor {
     convenience init(rgb: [Int]) {
-        let setRGB = rgb.map { CGFloat($0) / 255 }
+        let setRGB: [CGFloat] = rgb.map { CGFloat($0) / 255 }
         self.init(red: setRGB[0], green: setRGB[1], blue: setRGB[2], alpha: 1)
     }
 }

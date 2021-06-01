@@ -18,50 +18,70 @@ protocol SeatEditInput {
 }
 protocol SeatEditOutput: AnyObject {
     func setLeftBarButtonItem(title: String)
+    func updateCustomerResultAlert(title: String)
 }
-
 
 class SeatEditPresenter {
     private weak var delegate: SeatEditOutput?
     private var model: FlightInput?
+
     init(delegate: SeatEditOutput) {
         self.delegate = delegate
     }
 }
 extension SeatEditPresenter: SeatEditInput {
-    func getFlightName(id: Int){
+    func getFlightName(id: Int) {
         self.model = FlightModel()
+        // 便名取得
         self.model?.getFlightNameByID(id: id)
+        // 座席情報テーブル取得
         self.model?.getFlightConfigurationByID(id: id)
+        // 座席画像及び顧客名取得
         self.model?.getFlightSeatArray(id: id)
-        if let flightName = self.model?.flightInfo.first?.flightName{
+        // 便名表示に表示するタイトル指定
+        if let flightName = self.model?.flightInfo.first?.flightName {
             let title = "便名：" + flightName
             self.delegate?.setLeftBarButtonItem(title: title)
         }
     }
-    func getSeatColumn() -> Int{
-        if let column = self.model?.configurationInfo?.columnSeats{
+    /// コレクションビューのセルの列数
+    func getSeatColumn() -> Int {
+        if let column = self.model?.configurationInfo?.columnSeats {
+            // 座席行表示欄もあるためプラス１
             return column + 1
         }
         return 0
     }
+    /// コレクションビューのセルの行数
     func getSeatRow(id: Int) -> Int {
-
-        if let row = self.model?.configurationInfo?.rowSeats{
+        if let row = self.model?.configurationInfo?.rowSeats {
+            // 座席列表示欄もあるためプラス１
             return row + 1
         }
         return 0
     }
+    /// 座席表示欄の画像名取得
     func getSeatNumber(section: Int, row: Int) -> String {
-        return self.model?.seatImage[section][row] ?? "lo"
+        self.model?.seatImage[section][row] ?? "none"
     }
+    /// 座席表示欄の顧客名取得
     func getSeatName(section: Int, row: Int) -> String {
-        return self.model?.customerName[section][row] ?? "none"
+        self.model?.customerName[section][row] ?? "none"
     }
-    func resetCellInfo(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath){
+    /// セルドロップ後のデータベース更新
+    func resetCellInfo(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath) {
         self.model?.resetSeatInfo(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
     }
-    func updateSeatData(){
-        self.model?.updateCustomer()
+    /// セルドロップ後データベース更新結果取得
+    func updateSeatData() {
+        if let result = self.model?.updateCustomer() {
+            var title: String = ""
+            if result {
+                title = "座席の編集が成功しました。"
+            } else {
+                title = "座席の編集が失敗しました。"
+            }
+            self.delegate?.updateCustomerResultAlert(title: title)
+        }
     }
 }

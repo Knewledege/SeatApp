@@ -60,20 +60,17 @@ class MockFlightSelectionPresenter: FlightSelectionInput {
     }
     func setFlightInfo() {
         self.model?.getFlightInfo()
-        print("flightinfo", self.model?.flightInfo)
     }
     func setFlightName(row: Int) -> String{
         return self.model?.flightInfo[row].flightName ?? ""
     }
     func setFlightCount() -> Int{
-        print("customerCount",self.model?.flightInfo.count ?? 0)
         return self.model?.flightInfo.count ?? 0
     }
     func setFlightDetails(id: Int){
         self.model?.getFlightCustomer(id: id + 1)
         
         if let customers = self.model?.customerCount {
-            print("customer", customers)
             let seats: Int = self.model?.flightInfo[id].seats ?? 0
             let seatsText = "座席数：" + String(seats) + "数"
             let customersText = "搭乗人数：" + String(customers) + "名"
@@ -84,8 +81,16 @@ class MockFlightSelectionPresenter: FlightSelectionInput {
 }
 
 class MockFlightModel: FlightInput {
+
+    var flightInfo: [FlightInfo] = []
+    var customerCount: Int = 0
+    var configurationInfo: ConfigurationInfo?
+    var seatImage: [[String]] = []
+    var customerName: [[String]] = []
+    var loInfo: [LoInfo] = []
+    var seatNumber: [SeatNumber] = []
+
     func getFlightInfo() {
-        print("continue")
         flightInfo = [
             FlightInfo(id: 1, flightID: 1, seats: 10, flightName: "testFlight001"),
             FlightInfo(id: 2, flightID: 2, seats: 20, flightName: "testFlight002")
@@ -108,27 +113,22 @@ class MockFlightModel: FlightInput {
     func getFlightConfigurationByID(id: Int) {
         self.configurationInfo = ConfigurationInfo(id: 1, configurationInfoID: 1, flightInfoID: 1, rowSeats: 5, columnSeats: 4)
     }
-
+    func getFlightLoInfo(id: Int) {
+        self.loInfo = [
+            LoInfo(id: 1, configurationID: 1, type: "R", row: 2, column: nil),
+            LoInfo(id: 2, configurationID: 1, type: "C", row: nil, column: 2)
+        ]
+    }
     func getFlightSeatArray(id: Int) {
-        getFlightInfo()
-        
     }
 
     func resetSeatInfo(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath) {
         print(#function)
     }
 
-    func updateCustomer() {
+    func updateCustomer() -> Bool {
         print(#function)
+        return true
     }
     
-    var flightInfo: [FlightInfo] = []
-
-    var customerCount: Int = 0
-
-    var configurationInfo: ConfigurationInfo?
-
-    var seatImage: [[String]] = []
-
-    var customerName: [[String]] = []
 }

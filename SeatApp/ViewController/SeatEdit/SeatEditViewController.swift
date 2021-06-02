@@ -40,6 +40,9 @@ public class SeatEditViewController: UIViewController {
         seatEditCollectionView.dragInteractionEnabled = true
     }
     override public func viewWillAppear(_ animated: Bool) {
+        if #available(iOS 13.0, *) {
+            presentingViewController?.beginAppearanceTransition(false, animated: animated)
+        }
         super.viewWillAppear(true)
         CommonLog.LOG(massege: "")
     }
@@ -51,6 +54,9 @@ public class SeatEditViewController: UIViewController {
     }
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        if #available(iOS 13.0, *) {
+             presentingViewController?.endAppearanceTransition()
+         }
         CommonLog.LOG(massege: "")
     }
     override public func viewWillDisappear(_ animated: Bool) {
@@ -59,6 +65,11 @@ public class SeatEditViewController: UIViewController {
     }
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
+        if #available(iOS 13.0, *) {
+
+            presentingViewController?.beginAppearanceTransition(true, animated: animated)
+            presentingViewController?.endAppearanceTransition()
+        }
         CommonLog.LOG(massege: "")
     }
     deinit {
@@ -78,15 +89,6 @@ public class SeatEditViewController: UIViewController {
         cancelBarItem.constraintsConfigure(widthCnstant: 100, heightConstant: 30)
         self.navigationItem.rightBarButtonItems = [cancelBarItem, okBarItem]
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     /// OKボタン押下時
     @objc
     private func doneEdit() {
@@ -195,8 +197,13 @@ extension SeatEditViewController: UICollectionViewDataSource {
             supplementaryCell.cellBackgroundColor(color: UIColor.init(rgb: CommonColor.MAINCOLOR))
             // セルの画像設定
             supplementaryCell.imageConfigure(name: seatImage)
-            // 行・列数表示ラベル設定
+                        // 行数表示ラベル設定
             supplementaryCell.rowLabelConfigure(text: seatName)
+            // 列数表示ラベル設定
+            if indexPath.section == 0 {
+                // アルファベット表記
+                supplementaryCell.columnLabelConfigure(text: seatName)
+            }
         }
         return supplementaryCell
     }

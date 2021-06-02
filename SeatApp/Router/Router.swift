@@ -38,11 +38,10 @@ enum Board {
 
 final class Router {
     // MARK: - Screen Transition　画面遷移
-    /// - Parameters:
-    ///   - id :FlightID
+    ///   - id :「機体情報」テーブル「id」カラム
     ///   - to:遷移先のViewController
     ///   - from:遷移元のViewController
-    /// Show遷移
+    /// プッシュ遷移
     static func perform(id: Int, to: Board, from: UIViewController) {
         if let nextVC = to.boardInit(id: id) {
             from.navigationController?.pushViewController(nextVC, animated: true)

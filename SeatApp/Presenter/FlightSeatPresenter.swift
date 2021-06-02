@@ -8,13 +8,19 @@
 
 import Foundation
 protocol FlightSeatInput {
+    /// 便名取得
     func getFlightName(id: Int)
+    /// 座席列数取得
     func getSeatColumn() -> Int
+    /// 座席行数取得
     func getSeatRow(id: Int) -> Int
+    /// セル画像名取得
     func getSeatNumber(section: Int, row: Int) -> String
+    /// セル表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String
 }
 protocol FlightSeatOutput: AnyObject {
+    /// 便名表示　設定
     func setLeftBarButtonItem(title: String)
 }
 class FlightSeatPresenter {
@@ -58,7 +64,7 @@ extension FlightSeatPresenter: FlightSeatInput {
     }
     /// 座席表示画像名取得
     func getSeatNumber(section: Int, row: Int) -> String {
-        self.model?.seatImage[section][row] ?? "lo"
+        self.model?.seatImage[section][row] ?? "none"
     }
     /// 座席表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String {

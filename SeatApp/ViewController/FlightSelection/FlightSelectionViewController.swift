@@ -50,7 +50,7 @@ public class FlightSelectionViewController: UIViewController {
         // ポップオーバービュー初期設定
         popOverConfigure()
     }
-    // 便名選択欄　選択ボタン押下時
+    /// 便名選択欄　選択ボタン押下時
     @objc
     private func setPopOver(_ sender: UIButton) {
         sender.isSelected.toggle()
@@ -69,33 +69,36 @@ public class FlightSelectionViewController: UIViewController {
     @objc
     private func performDisplay() {
         CommonLog.LOG(massege: CommonLogMassege.PUSHPERFORMDISPLAYBUTTON)
-        guard let id = flightID else {
+        // ピッカーで選択した便名の便IDを取得
+        guard let flightid = flightID else {
             // flightIDがnilの場合、便が選択されていない為アラート表示
             alert()
             CommonLog.LOG(massege: CommonLogMassege.DIDNOTSELECTFLIGHTALERT)
             return
         }
         CommonLog.LOG(massege: CommonLogMassege.TRANSIOTIONFLIGHTSEATDISPLAY)
-        // 座席表示画面（表示モード）へ遷移
-        Router.perform(id: id + 1, to: .flightSeat, from: self)
+        // 機体情報」テーブル「便ID」カラムを取得
+        if let id = self.presenter?.getFlightID(index: flightid) {
+            // 座席表示画面（表示モード）へ遷移
+            // 引数id：「機体情報」テーブル「便ID」カラムを指定
+            Router.perform(id: id, to: .flightSeat, from: self)
+        }
     }
     /// 便名選択ピッカー OKボタン押下時
     @objc
     private func donePicker() {
         CommonLog.LOG(massege: CommonLogMassege.DIDSELECTPICKER)
         // ピッカーのデリゲートを用い、didSelectRowをテキストフィールドのタグに格納済み
+        // 便名選択欄の選択ボタンを選択済みに変更
+        flightNamePickerButton.isSelected.toggle()
+        // ポップオーバー非表示
+        popoverViewController.dismiss(animated: true, completion: nil)
+        // ピッカーで選択した便名をテキストフィールドに指定
+        flightNameField.text = presenter?.setFlightName(index: flightNameField.tag)
+        flightNameField.endEditing(true)
+        // ピッカーで選択した便情報をプレゼンターに依頼
+        presenter?.setFlightDetails(index: flightNameField.tag)
         flightID = flightNameField.tag
-        if let id = flightID {
-            // 便名選択欄の選択ボタンを選択済みに変更
-            flightNamePickerButton.isSelected.toggle()
-            // ポップオーバー非表示
-            popoverViewController.dismiss(animated: true, completion: nil)
-            // ピッカーで選択した便名をテキストフィールドに指定
-            flightNameField.text = presenter?.setFlightName(row: id)
-            flightNameField.endEditing(true)
-            // ピッカーで選択した便情報をプレゼンターに依頼
-            presenter?.setFlightDetails(id: id)
-        }
     }
     /// 便名選択ピッカー キャンセルボタン押下時
     @objc
@@ -131,15 +134,6 @@ public class FlightSelectionViewController: UIViewController {
     deinit {
         CommonLog.LOG(massege: "")
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 }
 extension FlightSelectionViewController {
     /// ピッカー上部のツールバー設定
@@ -185,9 +179,6 @@ extension FlightSelectionViewController: FlightSelectionOutput {
     }
 }
 extension FlightSelectionViewController: UIPopoverPresentationControllerDelegate {
-    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-       .none
-    }
     /// ポップオーバー外選択時
     public func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         /// ポップオーバー非表示のため、便名選択欄　選択ボタンも非選択状態にする
@@ -195,19 +186,23 @@ extension FlightSelectionViewController: UIPopoverPresentationControllerDelegate
     }
 }
 extension FlightSelectionViewController: UIPickerViewDelegate {
+    /// ピッカー選択時
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         // テキストフィールドのタグに記憶させ、ツールバーのOKボタン選択時にflightIDに設定する
         self.flightNameField.tag = row
     }
+    /// ピッカー表示テキスト
     public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         // 便名をプレゼンターに依頼
-        return presenter?.setFlightName(row: row)
+        return presenter?.setFlightName(index: row)
     }
 }
 extension FlightSelectionViewController: UIPickerViewDataSource {
+    /// ピッカー表示列数
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
+    /// ピッカー表示行数
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         // 全便の数をプレゼンターに依頼
         return presenter?.setFlightCount() ?? 0

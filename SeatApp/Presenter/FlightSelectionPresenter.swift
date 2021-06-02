@@ -8,10 +8,16 @@
 
 import Foundation
 protocol FlightSelectionInput {
+    /// 顧客情報取得
     func setFlightInfo()
-    func setFlightName(row: Int) -> String
-    func setFlightDetails(id: Int)
+    /// 便名取得
+    func setFlightName(index: Int) -> String
+    /// 機体情報取得
+    func setFlightDetails(index: Int)
+    /// 機体数取得
     func setFlightCount() -> Int
+    /// 便ID取得
+    func getFlightID(index: Int) -> Int
 }
 protocol FlightSelectionOutput: AnyObject {
     func setTextView(text: String)
@@ -28,24 +34,32 @@ internal class FlightSelectionPresenter {
     }
 }
 extension FlightSelectionPresenter: FlightSelectionInput {
-    ///
+    /// 顧客情報取得
     func setFlightInfo() {
         self.model?.getFlightInfo()
     }
-    func setFlightName(row: Int) -> String {
-        self.model?.flightInfo[row].flightName ?? ""
+    /// 便名取得
+    func setFlightName(index: Int) -> String {
+        self.model?.flightInfo[index].flightName ?? ""
     }
+    /// 機体数取得
     func setFlightCount() -> Int {
         self.model?.flightInfo.count ?? 0
     }
-    func setFlightDetails(id: Int) {
-        self.model?.getFlightCustomer(id: id + 1)
+    /// 機体情報取得
+    func setFlightDetails(index: Int) {
+        let flightID = getFlightID(index: index)
+        self.model?.getFlightCustomer(id: flightID)
         if let customers = self.model?.customerCount {
-            let seats: Int = self.model?.flightInfo[id].seats ?? 0
+            let seats: Int = self.model?.flightInfo[index].seats ?? 0
             let seatsText = "座席数：" + String(seats) + "数"
             let customersText = "搭乗人数：" + String(customers) + "名"
             let infoText = seatsText + "\n" + customersText
             self.delegate?.setTextView(text: infoText)
         }
+    }
+    /// 便ID取得
+    func getFlightID(index: Int) -> Int {
+        self.model?.flightInfo[index].flightID ?? 0
     }
 }

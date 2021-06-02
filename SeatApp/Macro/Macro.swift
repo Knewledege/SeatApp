@@ -36,21 +36,27 @@ public enum CommonColor {
 }
 /// 共通ログ出力クラス
 public enum CommonLog {
+    /// ログファイル出力
     static func LOG(massege: String, file: String = #file, function: String = #function, line: Int = #line) {
+        // 作成時間
         let now = Date()
         let format = DateFormatter()
-        format.dateFormat = "yyyy_MM_dd_hh_mm"
+        format.dateFormat = "yyyy_MM_dd"
+        // 出力内容
         let text = " \(file) [   \(function): \(format.string(from: now)) line =  \(line)] \(massege)\n"
+        // ファイル名
         let fileName = "seatAppLog" + format.string(from: now) + ".txt"
+        // ファイルパス
         let filePath = NSHomeDirectory() + "/Documents/" + fileName
+        // ファイルが存在すれば上書き
         if let file = FileHandle(forWritingAtPath: filePath) {
-            print()
             if let contentData = text.data(using: .utf8) {
                 file.seekToEndOfFile()
                 file.write(contentData)
                 file.closeFile()
             }
         } else {
+        // 存在しなければ作成
             FileManager.default.createFile(
                 atPath: filePath,
                 contents: text.data(using: .utf8),
@@ -74,4 +80,11 @@ public enum CommonLogMassege {
     static let SEATEDITBUTTONCANCELALERT: String = "座席編集キャンセルアラート"
     static let SEATDRAGSTART: String = "座席ドラッグ開始"
     static let SEATDROP: String = "座席ドロップ"
+}
+/// 座席列表示欄　列数アルファベット変換
+public enum CommonColumnEng {
+    static let COLUMNENG = [
+        "1": "A", "2": "B", "3": "C", "4": "D", "5": "E", "6": "F", "7": "G", "8": "H",
+        "9": "I", "10": "J", "11": "K", "12": "L", "13": "M", "14": "N", "15": "O", "16": "P", "17": "Q", "18": "R", "19": "S", "20": "T", "21": "U", "22": "V", "23": "W", "24": "X", "25": "Y", "26": "Z"
+    ]
 }

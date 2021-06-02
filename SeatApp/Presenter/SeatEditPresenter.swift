@@ -8,16 +8,25 @@
 
 import Foundation
 protocol SeatEditInput {
+    /// 便名取得
     func getFlightName(id: Int)
+    /// 座席列数取得
     func getSeatColumn() -> Int
+    /// 座席行数取得
     func getSeatRow(id: Int) -> Int
+    /// セル画像名取得
     func getSeatNumber(section: Int, row: Int) -> String
+    /// セル表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String
+    /// セル再設定
     func resetCellInfo(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath)
+    /// 顧客情報更新
     func updateSeatData()
 }
 protocol SeatEditOutput: AnyObject {
+    /// 便名表示　設定
     func setLeftBarButtonItem(title: String)
+    /// 顧客情報テーブル更新結果表示
     func updateCustomerResultAlert(title: String)
 }
 

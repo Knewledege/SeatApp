@@ -12,31 +12,31 @@ iOSバージョン    : 13.5
 ## 画面説明  
 ### 画面構成
 画面は下記の3画面となる  
-- フライト一覧画面
-- 座席情報表示画面  
-- 座席編集画面  
+- 便選択画面
+- 座席表示画面（表示モード）  
+- 座席表示画面（編集モード）  
 
-#### フライト一覧画面  
-<img src="https://user-images.githubusercontent.com/24288482/119284624-1852a200-bc7b-11eb-8b73-d2db1548a0c3.png" alt="フライト一覧画面" title="フライト一覧画面" width="400" height="600">  
+#### 便選択画面  
+<img src="https://user-images.githubusercontent.com/24288482/120410634-542deb80-c38e-11eb-8952-3d1347723770.png" alt="便選択画面" title="便選択画面" width="600" height="800">  
   
 - 画面表示項目  
-    - フライト選択ピッカー  
-    - フライト座席数      
-    - フライト搭乗人数  
+    - 便選択ピッカー  
+    - 便座席数      
+    - 便搭乗人数  
     
 
-ピッカーを選択すると、フライトの一覧が表示される。
-フライトを選択後、該当の座席数と搭乗人数が表示される。
+ピッカーを選択すると、便名の一覧が表示される。
+便名を選択後、該当の座席数と搭乗人数が表示される。
   
-#### 座席情報表示画面  
-<img src="https://user-images.githubusercontent.com/24288482/119284786-826b4700-bc7b-11eb-862e-c836b4ff6009.png" alt="座席情報表示画面" title="座席情報表示画面" width="400" height="600">  
+#### 座席表示画面（表示モード）  
+<img src="https://user-images.githubusercontent.com/24288482/120410656-5c862680-c38e-11eb-977e-ef3ba79372ad.png" alt="座席表示画面（表示モード）" title="座席表示画面（表示モード）" width="600" height="800">  
   
 都道府県一覧画面で選択された都道府県の詳細を表示  
 - 画面表示項目  
     - 座席情報詳細（顧客名及び顧客イメージ画像）  
   
-  ### 座席編集画面  
-  <img src="https://user-images.githubusercontent.com/24288482/119284877-b6466c80-bc7b-11eb-9ed3-ee9075927324.png" alt="座席編集画面" title="座席編集画面" width="400" height="600">  
+  ### 座席表示画面（編集モード）  
+  <img src="https://user-images.githubusercontent.com/24288482/120410648-5a23cc80-c38e-11eb-8215-4bcbd0536e57.png" alt="座席表示画面（編集モード）" title="座席表示画面（編集モード）" width="600" height="800">  
     
 ドロップ&ドラッグにより座席を自由に変更が可能である。
 ※既に席が埋まっている場合は変更できない。

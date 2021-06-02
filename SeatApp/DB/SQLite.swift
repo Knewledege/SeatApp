@@ -9,9 +9,13 @@
 import Foundation
 import GRDB
 class SQLite {
+    // ファイルマネージャー
     private let fileManager = FileManager.default
+    // ファイル名
     private let fileName = "Thumbs"
+    // ファイルパス
     private var filePath = ""
+    // アクセスキュー
     private var queue: DatabaseQueue?
 
     init() {
@@ -60,7 +64,7 @@ class SQLite {
         var result: FlightInfo?
         queue?.inDatabase { db in
             do {
-                result = try FlightInfo.fetchOne(db, key: id)
+                result = try FlightInfo.fetchOne(db, sql: "SELECT * FROM FL_INFO WHERE flightID = ?", arguments: [id], adapter: nil)
             } catch {
                 result = nil
             }
@@ -96,7 +100,7 @@ class SQLite {
         var result: ConfigurationInfo?
         do {
             try queue?.inDatabase { db in
-                result = try ConfigurationInfo.fetchOne(db, key: id)
+                result = try ConfigurationInfo.fetchOne(db, sql: "SELECT * FROM CONF_INFO WHERE flightInfoID = ?", arguments: [id], adapter: nil)
             }
         } catch {
             print(error)

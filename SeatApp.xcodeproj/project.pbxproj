@@ -10,10 +10,10 @@
 		2D27E92D39780D8F6BE63253 /* Pods_SeatApp_SeatAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B406CB6A63A08054FC458098 /* Pods_SeatApp_SeatAppUITests.framework */; };
 		C71E3348072012FD65AC2697 /* Pods_SeatApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A4285A928ABE05871FCFB6 /* Pods_SeatApp.framework */; };
 		EE9E92A57A861FC5136AB255 /* Pods_SeatAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA8A50E7C395EBC5B6DFECA2 /* Pods_SeatAppTests.framework */; };
-		FF1758232660068D00B596B2 /* Thumbs.db in Resources */ = {isa = PBXBuildFile; fileRef = FF1758222660068D00B596B2 /* Thumbs.db */; };
 		FF348EA9265AA059007C7ECB /* FlightItemNumberCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF348EA7265AA059007C7ECB /* FlightItemNumberCollectionViewCell.swift */; };
 		FF348EAA265AA059007C7ECB /* FlightItemNumberCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FF348EA8265AA059007C7ECB /* FlightItemNumberCollectionViewCell.xib */; };
 		FF348EAC265AB4D3007C7ECB /* SeatEditPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF348EAB265AB4D3007C7ECB /* SeatEditPresenter.swift */; };
+		FF36171C266662B600D770E4 /* Thumbs.db in Resources */ = {isa = PBXBuildFile; fileRef = FF36171B266662B600D770E4 /* Thumbs.db */; };
 		FF378653265272920000CA55 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF378652265272920000CA55 /* UIImageViewExtension.swift */; };
 		FF6A8126265C50AA00102BA9 /* FlightSelectionPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6A8125265C50AA00102BA9 /* FlightSelectionPresenterTests.swift */; };
 		FF733FAC265777A300F6003A /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF733FAB265777A300F6003A /* UIColorExtension.swift */; };
@@ -71,10 +71,10 @@
 		EED0D91234B20D7D135CA4CB /* Pods-SeatAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeatAppTests.debug.xcconfig"; path = "Target Support Files/Pods-SeatAppTests/Pods-SeatAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F12F05F735FD8BD5D7DEA980 /* Pods-SeatApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeatApp.debug.xcconfig"; path = "Target Support Files/Pods-SeatApp/Pods-SeatApp.debug.xcconfig"; sourceTree = "<group>"; };
 		FAD3B1B19A1C77808FDFFCB9 /* Pods-SeatApp-SeatAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeatApp-SeatAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-SeatApp-SeatAppUITests/Pods-SeatApp-SeatAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		FF1758222660068D00B596B2 /* Thumbs.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Thumbs.db; sourceTree = "<group>"; };
 		FF348EA7265AA059007C7ECB /* FlightItemNumberCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightItemNumberCollectionViewCell.swift; sourceTree = "<group>"; };
 		FF348EA8265AA059007C7ECB /* FlightItemNumberCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlightItemNumberCollectionViewCell.xib; sourceTree = "<group>"; };
 		FF348EAB265AB4D3007C7ECB /* SeatEditPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeatEditPresenter.swift; sourceTree = "<group>"; };
+		FF36171B266662B600D770E4 /* Thumbs.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Thumbs.db; sourceTree = "<group>"; };
 		FF378652265272920000CA55 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		FF6A8125265C50AA00102BA9 /* FlightSelectionPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightSelectionPresenterTests.swift; sourceTree = "<group>"; };
 		FF733FAB265777A300F6003A /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -203,7 +203,7 @@
 		FF8918B62653C51700BB6A31 /* DB */ = {
 			isa = PBXGroup;
 			children = (
-				FF1758222660068D00B596B2 /* Thumbs.db */,
+				FF36171B266662B600D770E4 /* Thumbs.db */,
 				FF8918B72653C52F00BB6A31 /* SQLite.swift */,
 			);
 			path = DB;
@@ -456,7 +456,7 @@
 				FFBB99CC264D1760007CB71A /* Assets.xcassets in Resources */,
 				FFBB99CA264D175E007CB71A /* Main.storyboard in Resources */,
 				FFBB99FC264D1EF6007CB71A /* SeatEdit.storyboard in Resources */,
-				FF1758232660068D00B596B2 /* Thumbs.db in Resources */,
+				FF36171C266662B600D770E4 /* Thumbs.db in Resources */,
 				FF8918C32654D2E500BB6A31 /* FlightSeatCollectionViewCell.xib in Resources */,
 				FFBB99F8264D1D6B007CB71A /* FlightSeat.storyboard in Resources */,
 			);

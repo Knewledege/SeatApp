@@ -36,30 +36,33 @@ public class FlightSeatViewController: UIViewController {
         flightSeatCollectionView.addGestureRecognizer(pinch)
     }
      override public func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(true)
-           CommonLog.LOG(massege: "")
-       }
-       override public func viewWillLayoutSubviews() {
-           CommonLog.LOG(massege: "")
-       }
-       override public func viewDidLayoutSubviews() {
-           CommonLog.LOG(massege: "")
-       }
-       override public func viewDidAppear(_ animated: Bool) {
-           super.viewDidAppear(true)
-           CommonLog.LOG(massege: "")
-       }
-       override public func viewWillDisappear(_ animated: Bool) {
-           super.viewWillDisappear(true)
-           CommonLog.LOG(massege: "")
-       }
-       override public func viewDidDisappear(_ animated: Bool) {
-           super.viewDidDisappear(true)
-           CommonLog.LOG(massege: "")
-       }
-       deinit {
-           CommonLog.LOG(massege: "")
-       }
+        super.viewWillAppear(true)
+        CommonLog.LOG(massege: "")
+        // 便名をプレゼンターに依頼
+        presenter?.getFlightName(id: flightID)
+        self.flightSeatCollectionView.reloadData()
+    }
+    override public func viewWillLayoutSubviews() {
+       CommonLog.LOG(massege: "")
+    }
+    override public func viewDidLayoutSubviews() {
+       CommonLog.LOG(massege: "")
+    }
+    override public func viewDidAppear(_ animated: Bool) {
+       super.viewDidAppear(true)
+       CommonLog.LOG(massege: "")
+    }
+    override public func viewWillDisappear(_ animated: Bool) {
+       super.viewWillDisappear(true)
+       CommonLog.LOG(massege: "")
+    }
+    override public func viewDidDisappear(_ animated: Bool) {
+       super.viewDidDisappear(true)
+       CommonLog.LOG(massege: "")
+    }
+    deinit {
+       CommonLog.LOG(massege: "")
+    }
     /// 座席編集ボタン設定
      private func setRightBarButtonItem() {
          let editButton = UIButton(type: .custom)
@@ -69,16 +72,6 @@ public class FlightSeatViewController: UIViewController {
          editBarItem.constraintsConfigure(widthCnstant: 100, heightConstant: 30)
          self.navigationItem.rightBarButtonItem = editBarItem
      }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     /// セル拡大縮小ジャスチャー検知時
     @objc
     private func pinchCell(_ sender: UIPinchGestureRecognizer) {
@@ -159,9 +152,15 @@ extension FlightSeatViewController: UICollectionViewDataSource {
             supplementaryCell.cellBackgroundColor(color: UIColor.init(rgb: CommonColor.MAINCOLOR))
             // セルの画像設定
             supplementaryCell.imageConfigure(name: seatImage)
-            // 行・列数表示ラベル設定
+            // 行数表示ラベル設定
             supplementaryCell.rowLabelConfigure(text: seatName)
+            // 列数表示ラベル設定
+            if indexPath.section == 0 {
+                // アルファベット表記
+                supplementaryCell.columnLabelConfigure(text: seatName)
+            }
         }
+
         return supplementaryCell
     }
 }

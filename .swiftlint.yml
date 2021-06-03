@@ -108,7 +108,7 @@ opt_in_rules:
   - fallthrough
   - fatal_error_message
 #  - file_header # このルールの意味を理解していないため
-  - file_name
+#  - file_name
   - first_where
   - force_unwrapping
   - function_default_parameter_at_end
@@ -164,7 +164,6 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
   - untyped_error_in_catch
   - unused_import
-  - unused_private_declaration
   - vertical_parameter_alignment_on_call
 #  - vertical_whitespace_between_cases # Switch文のケース間に空白行を設けたくないこともあるため
 #  - vertical_whitespace_closing_braces # 中括弧を閉じる前に空白行を設けたいことがあるため

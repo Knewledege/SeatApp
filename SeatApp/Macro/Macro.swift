@@ -8,21 +8,16 @@
 
 import Foundation
 /// 共通画像名
-public enum CommonImageResource {
+public enum Common {
 
     static let TITLE: String = "座席編集アプリ"
-    static let BOY: String = "boy"
     static let CANCELBTN: String = "cancel_btn"
     static let EDITBTN: String = "edit_btn"
-    static let FEMALE: String = "female"
-    static let GIRL: String = "girl"
-    static let LEFTCELL: String = "left_cell"
-    static let MALE: String = "male"
     static let OKBTN: String = "ok_btn"
     static let PULLDOWNBTN: String = "pulldown_btn"
     static let SEAT: String = "seat"
-    static let TOPCELL: String = "top_cell"
     static let TOPEDITBTN: String = "top_edit_btn"
+    static let NOCUTMERNAME: String = "none"
 }
 /// 便選択画面共通変数
 public enum CommonFlightSelection {
@@ -87,4 +82,52 @@ public enum CommonColumnEng {
         "1": "A", "2": "B", "3": "C", "4": "D", "5": "E", "6": "F", "7": "G", "8": "H",
         "9": "I", "10": "J", "11": "K", "12": "L", "13": "M", "14": "N", "15": "O", "16": "P", "17": "Q", "18": "R", "19": "S", "20": "T", "21": "U", "22": "V", "23": "W", "24": "X", "25": "Y", "26": "Z"
     ]
+}
+enum CellType {
+    case topCell
+    case leftCell
+    case customerCell(CustomerType)
+    case seat
+    case passCell
+
+    var imageName: String {
+        switch self {
+        case .topCell:
+            return "top_cell.png"
+        case .leftCell:
+            return "left_cell.png"
+        case .seat:
+            return "seat"
+        case .passCell:
+            return ""
+        case .customerCell(.boy):
+            return CustomerType.boy.imageName
+        case .customerCell(.male):
+            return CustomerType.male.imageName
+        case .customerCell(.female):
+            return CustomerType.female.imageName
+        case .customerCell(.girl):
+            return CustomerType.girl.imageName
+        }
+    }
+
+    enum CustomerType {
+        case male
+        case female
+        case boy
+        case girl
+
+        var imageName: String {
+            switch self {
+            case .male:
+                return "male.png"
+            case .female:
+                return "female.png"
+            case .boy:
+                return "boy.png"
+            case .girl:
+                return "girl.png"
+            }
+        }
+    }
 }

@@ -15,11 +15,13 @@ class SQLite {
     private let fileName = "Thumbs"
     // ファイルパス
     private var filePath = ""
+    private var currentVersion = "01"
+    private var passVersion = "01"
+    private var currentFilePath = NSHomeDirectory() + "/Documents/"
     // アクセスキュー
     private var queue: DatabaseQueue?
 
     init() {
-//        print(filePath)
         self.createDatabase()
     }
 
@@ -34,15 +36,18 @@ class SQLite {
 
     /// データベース生成
     private func createDatabase() {
-        guard let path = Bundle.main.path(forResource: fileName, ofType: "db") else {
-            return
+        filePath = currentFilePath + fileName + currentVersion + ".db"
+        let existsDocument = fileManager.fileExists(atPath: filePath)
+        if !existsDocument {
+            guard let bundlePath = Bundle.main.path(forResource: fileName, ofType: "db") else {
+                return
+            }
+            do {
+                try fileManager.copyItem(atPath: bundlePath, toPath: filePath)
+            } catch {
+            }
         }
-        filePath = path
-        let exists = fileManager.fileExists(atPath: filePath)
         dataBaseConfigure()
-        if !exists {
-            queue = nil
-        }
     }
     /// 顧客情報テーブル更新
     internal func insertCustomers(custmoers: [Customer]) -> Bool {

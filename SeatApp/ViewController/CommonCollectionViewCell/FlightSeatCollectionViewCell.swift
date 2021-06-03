@@ -27,10 +27,13 @@ class FlightSeatCollectionViewCell: UICollectionViewCell {
         rowLabel.text = nil
     }
     /// 座席画像設定
-    internal func imageConfigure(name: String) {
+    internal func imageConfigure(type: CellType) {
         // noneは空席もしくは廊下のため未設定
-        if name != "none" {
-            contentImage.imageConfigure(name: name)
+        switch type {
+        case .passCell:
+            break
+        default:
+            contentImage.imageConfigure(name: type.imageName)
         }
     }
     /// 背景色
@@ -40,7 +43,7 @@ class FlightSeatCollectionViewCell: UICollectionViewCell {
     /// 顧客名ラベル設定
     internal func rowLabelConfigure(text: String) {
         // noneは空席もしくは廊下のため未設定
-        if text != "none" {
+        if text != Common.NOCUTMERNAME {
             rowLabel.text = text
         }
     }

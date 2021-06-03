@@ -15,7 +15,7 @@ protocol FlightSeatInput {
     /// 座席行数取得
     func getSeatRow(id: Int) -> Int
     /// セル画像名取得
-    func getSeatNumber(section: Int, row: Int) -> String
+    func getSeatNumber(section: Int, row: Int) -> CellType
     /// セル表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String
 }
@@ -63,8 +63,8 @@ extension FlightSeatPresenter: FlightSeatInput {
         return 0
     }
     /// 座席表示画像名取得
-    func getSeatNumber(section: Int, row: Int) -> String {
-        self.model?.seatImage[section][row] ?? "none"
+    func getSeatNumber(section: Int, row: Int) -> CellType {
+        self.model?.seatImage[section][row] ?? CellType.passCell
     }
     /// 座席表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String {

@@ -66,7 +66,7 @@ public class FlightSeatViewController: UIViewController {
     /// 座席編集ボタン設定
      private func setRightBarButtonItem() {
          let editButton = UIButton(type: .custom)
-         editButton.buttonConfigure(imageName: CommonImageResource.EDITBTN, target: self, action: #selector(pushDisplay))
+         editButton.buttonConfigure(imageName: Common.EDITBTN, target: self, action: #selector(pushDisplay))
          let editBarItem = UIBarButtonItem(customView: editButton)
 
          editBarItem.constraintsConfigure(widthCnstant: 100, heightConstant: 30)
@@ -124,13 +124,13 @@ extension FlightSeatViewController: UICollectionViewDataSource {
         }
         // 座席行・列表示欄　背景緑
         if indexPath.section == 0 || indexPath.row == 0 {
-            cell.cellBackgroundColor(color: UIColor.init(rgb: CommonColor.MAINCOLOR))
+            cell.cellBackgroundColor(color: UIColor().mainColorGreen())
         } else {
         // 座席表示欄　背景白
             cell.cellBackgroundColor(color: .white)
         }
         // セルの画像設定
-        cell.imageConfigure(name: seatImage)
+        cell.imageConfigure(type: seatImage)
         // 顧客名表示ラベル設定
         cell.rowLabelConfigure(text: seatName)
 
@@ -149,9 +149,9 @@ extension FlightSeatViewController: UICollectionViewDataSource {
                 let seatName = self.presenter?.getSeatName(section: indexPath.section, row: indexPath.row)  else {
                   return supplementaryCell
             }
-            supplementaryCell.cellBackgroundColor(color: UIColor.init(rgb: CommonColor.MAINCOLOR))
+            supplementaryCell.cellBackgroundColor(color: UIColor().mainColorGreen())
             // セルの画像設定
-            supplementaryCell.imageConfigure(name: seatImage)
+            supplementaryCell.imageConfigure(type: seatImage)
             // 行数表示ラベル設定
             supplementaryCell.rowLabelConfigure(text: seatName)
             // 列数表示ラベル設定

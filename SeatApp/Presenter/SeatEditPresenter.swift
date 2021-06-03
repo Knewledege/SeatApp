@@ -15,7 +15,7 @@ protocol SeatEditInput {
     /// 座席行数取得
     func getSeatRow(id: Int) -> Int
     /// セル画像名取得
-    func getSeatNumber(section: Int, row: Int) -> String
+    func getSeatNumber(section: Int, row: Int) -> CellType
     /// セル表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String
     /// セル再設定
@@ -70,8 +70,8 @@ extension SeatEditPresenter: SeatEditInput {
         return 0
     }
     /// 座席表示欄の画像名取得
-    func getSeatNumber(section: Int, row: Int) -> String {
-        self.model?.seatImage[section][row] ?? "none"
+    func getSeatNumber(section: Int, row: Int) -> CellType {
+        self.model?.seatImage[section][row] ?? CellType.passCell
     }
     /// 座席表示欄の顧客名取得
     func getSeatName(section: Int, row: Int) -> String {

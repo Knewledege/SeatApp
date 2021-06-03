@@ -26,7 +26,7 @@ protocol FlightInput {
     var flightInfo: [FlightInfo] { get }
     var customerCount: Int { get }
     var configurationInfo: ConfigurationInfo? { get }
-    var seatImage: [[String]] { get }
+    var seatImage: [[CellType]] { get }
     var customerName: [[String]] { get }
 }
 class FlightModel {
@@ -43,7 +43,7 @@ class FlightModel {
     // 通路情報
     private var loInfo: [LoInfo] = []
     // 座席画像名
-    internal var seatImage: [[String]] = []
+    internal var seatImage: [[CellType]] = []
     // 顧客名
     internal var customerName: [[String]] = []
     // 搭乗者数
@@ -93,17 +93,24 @@ extension FlightModel: FlightInput {
         }
     }
     /// 座席表示欄　画像名設定
-    func getCustomerImage(customer: Customer) -> String {
-        var image: String = ""
+    func getCustomerImage(customer: Customer) -> CellType {
         // 男性且つ18才未満
-        if customer.gender == "M" && customer.age <= 18 { image = CommonImageResource.BOY }
+        if customer.gender == "M" && customer.age <= 18 {
+            return CellType.customerCell(.boy)
+        }
         // 男性且つ19才以上
-        if customer.gender == "M" && customer.age > 18 { image = CommonImageResource.MALE }
+        if customer.gender == "M" && customer.age > 18 {
+            return CellType.customerCell(.male)
+        }
         // 女性且つ18才未満
-        if customer.gender == "F" && customer.age <= 18 { image = CommonImageResource.GIRL }
+        if customer.gender == "F" && customer.age <= 18 {
+            return CellType.customerCell(.girl)
+        }
         // 女性且つ19才以上
-        if customer.gender == "F" && customer.age > 18 { image = CommonImageResource.FEMALE }
-        return image
+        if customer.gender == "F" && customer.age > 18 {
+            return CellType.customerCell(.female)
+        }
+        return CellType.passCell
     }
     /// セル表示画像・表示テキスト設定
     /*
@@ -137,9 +144,10 @@ extension FlightModel: FlightInput {
         for i in 0...rowSeats {
             // i 行の座席番号を全部取得
             var rowData: [String] = self.seatNumber.filter { $0.row == i }.map { $0.seatNumber }
+            var tempSeatImage = [CellType](repeating: .passCell, count: rowData.count)
             // 仮顧客名 "none"で初期化。最終的には、顧客がいる席はcustomer.name　いない場合は空席のためそのまま
             // tempCustomerName[0] は座席行表示欄用
-            var tempCustomerName: [String] = [String](repeating: "none", count: columnSeats)
+            var tempCustomerName: [String] = [String](repeating: Common.NOCUTMERNAME, count: columnSeats)
             // i行目の各座席の画像名及び表示テキストを仮設定
             rowData.enumerated().forEach { index, number in
                 // i行のindex列目の座席に顧客がいるかを座席番号で検索
@@ -148,11 +156,12 @@ extension FlightModel: FlightInput {
                     // tempCustomerName[0] は座席行表示欄用のため +1
                     tempCustomerName[index + 1] = customer.name
                     // 座席画像設定
-                    rowData[index] = getCustomerImage(customer: customer)
+                    tempSeatImage[index] = getCustomerImage(customer: customer)
                 } else {
                 // 顧客が検索できなかった場合空席
                 // "seat.png"を設定
-                    rowData[index] = CommonImageResource.SEAT
+                    rowData[index] = Common.SEAT
+                    tempSeatImage[index] = CellType.seat
                 }
             }
             // i 行の座席番号が存在しない場合は、座席列表示欄もしくは全部通路の行
@@ -160,14 +169,14 @@ extension FlightModel: FlightInput {
                 // 座席列表示欄
                 if i == 0 {
                     // 座席列表示欄画像名
-                    let topCell = [String](repeating: CommonImageResource.TOPCELL, count: columnSeats)
-                    rowData = topCell
+                    let topCell = [CellType](repeating: .topCell, count: columnSeats)
+                    tempSeatImage = topCell
                     for i in 1..<columnSeats { tempCustomerName[i] = String(i) }
                 } else {
                 // 通路の行
                     // 行通路　通路のため"none"で設定
-                    let rowPass: [String] = [String](repeating: "none", count: columnSeats)
-                    rowData = rowPass
+                    let rowPass = [CellType](repeating: .passCell, count: columnSeats)
+                    tempSeatImage = rowPass
                 }
             } else {
             // i 行の座席番号が存在する場合
@@ -175,23 +184,23 @@ extension FlightModel: FlightInput {
                 tempCustomerName[0] = String(rowCount)
                 rowCount += 1
                 // 座席行表示欄　分の要素追加
-                rowData.insert(CommonImageResource.LEFTCELL, at: 0)
+                tempSeatImage.insert(CellType.leftCell, at: 0)
             }
             // i行の座席画像追加
-            seatImage.append(rowData)
+            seatImage.append(tempSeatImage)
             // i行の顧客名追加
             customerName.append(tempCustomerName)
 
             // 各列の通路追加
             // seatImage[0]及びcustomerName[0] は座席行表示欄用のため +1
             columnsPass.forEach {
-                seatImage[i].insert("none", at: $0 + 1)
-                customerName[i].insert("none", at: $0 + 1)
+                seatImage[i].insert(.passCell, at: $0 + 1)
+                customerName[i].insert(Common.NOCUTMERNAME, at: $0 + 1)
             }
         }
         // 一番左上は画像と顧客名どちらも"none"
-        seatImage[0][0] = "none"
-        customerName[0][0] = "none"
+        seatImage[0][0] = .passCell
+        customerName[0][0] = Common.NOCUTMERNAME
     }
     /// 通路情報テーブル取得
     func getFlightLoInfo(id: Int) {
@@ -206,8 +215,8 @@ extension FlightModel: FlightInput {
         // 移動先座席の顧客名に移動元座席の顧客名を設定
         self.customerName[destinationIndexPath.section][destinationIndexPath.row] = self.customerName[sourceIndexPath.section][sourceIndexPath.row]
         // 移動元の画像名と座席名を空席設定
-        self.seatImage[sourceIndexPath.section][sourceIndexPath.row ] = "seat"
-        self.customerName[sourceIndexPath.section][sourceIndexPath.row] = "none"
+        self.seatImage[sourceIndexPath.section][sourceIndexPath.row ] = .seat
+        self.customerName[sourceIndexPath.section][sourceIndexPath.row] = Common.NOCUTMERNAME
         // 移動元及び移動先の座席番号取得
         if let sourceSeat = self.seatNumber.first(where: { $0.row == sourceIndexPath.section && $0.column == sourceIndexPath.row })?.seatNumber,
             let destinationSeat = self.seatNumber.first(where: { $0.row == destinationIndexPath.section && $0.column == destinationIndexPath.row })?.seatNumber {

@@ -78,9 +78,9 @@ public class SeatEditViewController: UIViewController {
     /// OKボタン・キャンセルボタン設定
     private func setRightBarButtonItem() {
         let okButton = UIButton(type: .custom)
-        okButton.buttonConfigure(imageName: CommonImageResource.OKBTN, target: self, action: #selector(doneEdit))
+        okButton.buttonConfigure(imageName: Common.OKBTN, target: self, action: #selector(doneEdit))
         let cancelButton = UIButton(type: .custom)
-        cancelButton.buttonConfigure(imageName: CommonImageResource.CANCELBTN, target: self, action: #selector(cancelEdit))
+        cancelButton.buttonConfigure(imageName: Common.CANCELBTN, target: self, action: #selector(cancelEdit))
 
         let okBarItem = UIBarButtonItem(customView: okButton)
         let cancelBarItem = UIBarButtonItem(customView: cancelButton)
@@ -170,13 +170,13 @@ extension SeatEditViewController: UICollectionViewDataSource {
         }
         // 座席行・列表示欄　背景緑
         if indexPath.section == 0 || indexPath.row == 0 {
-            cell.cellBackgroundColor(color: UIColor.init(rgb: CommonColor.MAINCOLOR))
+            cell.cellBackgroundColor(color: UIColor().mainColorGreen())
         } else {
         // 座席表示欄　背景白
             cell.cellBackgroundColor(color: .white)
         }
         // セルの画像設定
-        cell.imageConfigure(name: seatImage)
+        cell.imageConfigure(type: seatImage)
         // 顧客名表示ラベル設定
         cell.rowLabelConfigure(text: seatName)
 
@@ -194,9 +194,9 @@ extension SeatEditViewController: UICollectionViewDataSource {
                   return supplementaryCell
             }
             // 座席行・列画像名　及び　行・列数をプレゼンターに取得依頼
-            supplementaryCell.cellBackgroundColor(color: UIColor.init(rgb: CommonColor.MAINCOLOR))
+            supplementaryCell.cellBackgroundColor(color: UIColor().mainColorGreen())
             // セルの画像設定
-            supplementaryCell.imageConfigure(name: seatImage)
+            supplementaryCell.imageConfigure(type: seatImage)
                         // 行数表示ラベル設定
             supplementaryCell.rowLabelConfigure(text: seatName)
             // 列数表示ラベル設定
@@ -233,7 +233,10 @@ extension SeatEditViewController: UICollectionViewDropDelegate {
         // プレゼンターに選択した座席の画像を依頼
         if let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row) {
             // 既に顧客がいる座席（座席画像がseatではない座席）もドロップはキャンセル
-            if seatImage != "seat" {
+            switch seatImage {
+            case .seat:
+                return UICollectionViewDropProposal(operation: .move, intent: .unspecified)
+            default:
                 return UICollectionViewDropProposal(operation: .cancel)
             }
         }
@@ -252,16 +255,25 @@ extension SeatEditViewController: UICollectionViewDragDelegate {
         guard let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row) else {
             return []
         }
-        // 選択したセルが廊下、及び空席の場合何もしない
-        if seatImage == "none" || seatImage == "seat" {
+        // 選択したセルが顧客の席以外の場合何もしない
+        switch seatImage {
+        case .passCell:
             return []
+        case .seat:
+            return []
+        case .leftCell:
+            return []
+        case .topCell:
+            return []
+        default:
+            // 選択した座席に既に顧客がいる場合、ドラッグ
+            if let seat = UIImage(named: seatImage.imageName) {
+                let itemProvider = NSItemProvider(object: seat)
+                let dragItem = UIDragItem(itemProvider: itemProvider)
+                return [dragItem]
+            }
         }
-        // 選択した座席に既に顧客がいる場合、ドラッグ
-        if let seat = UIImage(named: seatImage) {
-            let itemProvider = NSItemProvider(object: seat)
-            let dragItem = UIDragItem(itemProvider: itemProvider)
-            return [dragItem]
-        }
+
         return []
     }
 }

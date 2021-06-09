@@ -10,15 +10,19 @@ import UIKit
 
 public class SeatEditViewController: UIViewController {
     // 座席行表示欄、座席列表示欄、座席表示欄　用コレクションビュー
-    @IBOutlet private weak var seatEditCollectionView: UICollectionView!
+    @IBOutlet private weak var seatEditScrollView: UIScrollView!
     // プレゼンター
     private var presenter: SeatEditInput?
     // 便ID
     internal var flightID: Int = 0
     // 座席編集痕跡判定
     private var changeSeat = false
-    // セルカスタムレイアウト
-    private let layout = CollectionViewLayout()
+    // カスタムレイアウト
+    private let contentsView = CustumContentsView()
+    // 変更前の座席ビューのrow
+    private var seatRow = 0
+    // 変更前の座席ビューのcolumn
+    private var seatColumn = 0
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -28,16 +32,26 @@ public class SeatEditViewController: UIViewController {
         presenter?.getFlightName(id: flightID)
         // OKボタン・キャンセルボタン設定
         setRightBarButtonItem()
-        // セルの横幅設定
-        layout.cellWidth = (UIScreen.main.bounds.width - 30) / (CGFloat(self.presenter?.getSeatColumn() ?? 0) - 1)
-        // セルのカスタムレイアウト指定
-        seatEditCollectionView.collectionViewLayout = layout
-        seatEditCollectionView.register(UINib(nibName: FlightSeatCollectionViewCell.className, bundle: nil), forCellWithReuseIdentifier: FlightSeatCollectionViewCell.className)
-               seatEditCollectionView.register(UINib(nibName: FlightItemNumberCollectionViewCell.className, bundle: nil), forSupplementaryViewOfKind: FlightItemNumberCollectionViewCell.className, withReuseIdentifier: FlightItemNumberCollectionViewCell.className)
-        seatEditCollectionView.dataSource = self
-        seatEditCollectionView.dropDelegate = self
-        seatEditCollectionView.dragDelegate = self
-        seatEditCollectionView.dragInteractionEnabled = true
+        // スクロールビューの設定
+        seatEditScrollView.delegate = self
+        seatEditScrollView.maximumZoomScale = 8.0
+        seatEditScrollView.minimumZoomScale = 1.0
+        // スクロールビューに配置するビューの生成
+        contentsView.contentViewConfigure(seatRows: self.presenter?.getSeatRow(id: flightID) ?? 0, seatColumns: self.presenter?.getSeatColumn() ?? 0, screenWidth: UIScreen.main.bounds.width)
+        // スクロールビューにUIViewを追加
+        seatEditScrollView.addSubview(contentsView.contentView)
+        seatEditScrollView.contentSize = contentsView.seatViewContentSize
+        // 座席行・列表示欄、座席表示欄の全画像を取得
+        let seatNumber = self.presenter?.getAllSeatNumber() ?? [[CellType.passCell]]
+        // 座席行・列表示欄、座席表示欄の全テキストを取得
+        let seatName = self.presenter?.getAllSeatName() ?? [[Common.NOCUTMERNAME]]
+        // 座席行・列表示欄、座席表示欄の画像とテキストを設定
+        contentsView.setContent(seatNumber: seatNumber, seatName: seatName)
+        // ドロップ&ドラッグ　デリゲート設定
+        let dragDelegate: UIDragInteractionDelegate = self
+        let dropDelegate: UIDropInteractionDelegate = self
+        // ドロップ&ドラッグ　デリゲートを全座席に設定
+        contentsView.addDragDropIntaraction(dragInteractionDelegate: dragDelegate, dropInteractionDelegate: dropDelegate)
     }
     override public func viewWillAppear(_ animated: Bool) {
         if #available(iOS 13.0, *) {
@@ -147,133 +161,142 @@ extension SeatEditViewController: SeatEditOutput {
         self.present(alert, animated: true, completion: nil)
     }
 }
-// MARK: - UICollectionViewDataSource
-extension SeatEditViewController: UICollectionViewDataSource {
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // 座席行数をプレゼンターに取得依頼
-        return self.presenter?.getSeatRow(id: flightID) ?? 0
+extension SeatEditViewController: UIScrollViewDelegate {
+    /// ズーム対象を設定
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        contentsView.contentView
     }
-
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // 座席列数をプレゼンターに取得依頼
-        return self.presenter?.getSeatColumn() ?? 0
-    }
-    /// 座席表示欄　セル設定
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FlightSeatCollectionViewCell.className, for: indexPath) as? FlightSeatCollectionViewCell else {
-            return UICollectionViewCell()
+    /// ズームしたら座席行・列表示欄を端に固定
+    /// scrollView.zoomScaleで割ってる理由は拡大縮小際の比率を与えないと、スクロール量にズレが生じるため
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y / scrollView.zoomScale
+        let offsetX = scrollView.contentOffset.x / scrollView.zoomScale
+        contentsView.dummyView.frame.origin = CGPoint(x: offsetX, y: offsetY)
+        contentsView.topContentViews.forEach { topContent in
+            topContent.frame.origin.y = offsetY
         }
-        // 座席表示画像名　及び　「顧客情報」テーブル「名前」をプレゼンターに取得依頼
-        guard let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row),
-            let seatName = self.presenter?.getSeatName(section: indexPath.section, row: indexPath.row)  else {
-          return cell
+        contentsView.leftContentViews.forEach { leftContent in
+            leftContent.frame.origin.x = offsetX
         }
-        // 座席行・列表示欄　背景緑
-        if indexPath.section == 0 || indexPath.row == 0 {
-            cell.cellBackgroundColor(color: UIColor().mainColorGreen())
-        } else {
-        // 座席表示欄　背景白
-            cell.cellBackgroundColor(color: .white)
-        }
-        // セルの画像設定
-        cell.imageConfigure(type: seatImage)
-        // 顧客名表示ラベル設定
-        cell.rowLabelConfigure(text: seatName)
-
-        return cell
-    }
-    /// 座席行・列表示　セル設定
-    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let supplementaryCell = collectionView.dequeueReusableSupplementaryView(ofKind: FlightItemNumberCollectionViewCell.className, withReuseIdentifier: FlightItemNumberCollectionViewCell.className, for: indexPath) as? FlightItemNumberCollectionViewCell else {
-            return UICollectionReusableView()
-        }
-        // 座席行・列表示欄　の設定
-        if indexPath.section == 0 || indexPath.row == 0 {
-            guard let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row),
-                let seatName = self.presenter?.getSeatName(section: indexPath.section, row: indexPath.row)  else {
-                  return supplementaryCell
-            }
-            // 座席行・列画像名　及び　行・列数をプレゼンターに取得依頼
-            supplementaryCell.cellBackgroundColor(color: UIColor().mainColorGreen())
-            // セルの画像設定
-            supplementaryCell.imageConfigure(type: seatImage)
-                        // 行数表示ラベル設定
-            supplementaryCell.rowLabelConfigure(text: seatName)
-            // 列数表示ラベル設定
-            if indexPath.section == 0 {
-                // アルファベット表記
-                supplementaryCell.columnLabelConfigure(text: seatName)
-            }
-        }
-        return supplementaryCell
     }
 }
-extension SeatEditViewController: UICollectionViewDropDelegate {
-    /// ドロップ確定時
-    public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard let item = coordinator.items.first,
-               let destinationIndexPath = coordinator.destinationIndexPath,
-               let sourceIndexPath = item.sourceIndexPath else { return }
-        self.presenter?.resetCellInfo(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
-           collectionView.performBatchUpdates({
-               collectionView.reloadItems(at: [sourceIndexPath])
-               collectionView.reloadItems(at: [destinationIndexPath])
-               }, completion: nil)
-           coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
-        self.changeSeat = true
-        CommonLog.LOG(massege: CommonLogMassege.SEATDROP)
+extension SeatEditViewController: UIDragInteractionDelegate {
+    /// ドラッグ時
+    public func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        // ドラッグしたビューの画像オブジェクト
+        var seatImage: UIImage?
+        // ドラッグ中のビュー
+        guard let dragView = interaction.view else {
+            return []
+        }
+        // ドラッグ中のビューの座標を取得
+        let dragPoint = session.location(in: dragView)
+        // ドラッグ中のビューの特定
+        guard let selectView = dragView.hitTest(dragPoint, with: nil)  else {
+            return []
+        }
+        // ドラッグ中のビューを座席ビューと比較
+        contentsView.seatContentViews.enumerated().forEach { row, views in
+            views.enumerated().forEach { column, seatView in
+                // 座席ビューと一致した場合、座席にあるビューをドラッグしている
+                if seatView == selectView {
+                    // 一致した際のrow,columnを使って座席に設定しているテキストを取得
+                    let text = contentsView.seatContentCustomerNameLabels[row][column].text ?? ""
+                    // 座席のテキストが設定されている場合、ドラッグしているビューは顧客の席のためドラッグ可能とする
+                    if !text.isEmpty {
+                        // ドラッグする画像を設定
+                        seatImage = contentsView.seatContentImages[row][column].image
+                        // ドラッグする座席の要素番号を保存、ドロップ時に使用
+                        seatRow = row
+                        seatColumn = column
+                    }
+                }
+            }
+        }
+        // ドラッグしている画像を取得、ドラッグするアイテムとして登録
+        if let image = seatImage {
+            let itemProvider = NSItemProvider(object: image)
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            return [dragItem]
+        }
+        return []
     }
-    /// ドロップ位置指定時
-    public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,
-                               withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        // 画面外や座席表示欄外　はドロップをキャンセル
-        guard let indexPath = destinationIndexPath else {
+}
+extension SeatEditViewController: UIDropInteractionDelegate {
+    // ドロップ時
+    public func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        // ドロップを禁止するかどうか
+        var dropCancel = true
+        // ドロップ中のビュー
+        guard let dragView = interaction.view else {
             return UICollectionViewDropProposal(operation: .cancel)
         }
-        // プレゼンターに選択した座席の画像を依頼
-        if let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row) {
-            // 既に顧客がいる座席（座席画像がseatではない座席）もドロップはキャンセル
-            switch seatImage {
-            case .seat:
-                return UICollectionViewDropProposal(operation: .move, intent: .unspecified)
-            default:
-                return UICollectionViewDropProposal(operation: .cancel)
+        // ドロップ中のビューの座標を取得
+        let dragPoint = session.location(in: dragView)
+        // ドロップ中のビューの特定
+        guard let selectView = dragView.hitTest(dragPoint, with: nil)  else {
+            return UICollectionViewDropProposal(operation: .cancel)
+        }
+        // ドロップ中のビューを座席ビューと比較
+        contentsView.seatContentViews.enumerated().forEach { row, views in
+            views.enumerated().forEach { column, seatView in
+                // 座席ビューと一致した場合、座席にあるビューにドロップしている
+                if seatView == selectView {
+                    // 一致した際のrow,columnを使って座席に設定しているテキストを取得
+                    let text = contentsView.seatContentCustomerNameLabels[row][column].text ?? ""
+                    // 一致した際のrow,columnを使って座席に設定している画像を取得
+                    let image = contentsView.seatContentImages[row][column].image
+                    // 座席のテキストが空白且つ画像が設定されてるなら空席のためドロップ可能
+                    // それ以外は既に顧客がいるか通路のためドロップできない
+                    if text.isEmpty && image != nil {
+                        dropCancel = false
+                    }
+                }
             }
+        }
+        if dropCancel {
+            return UICollectionViewDropProposal(operation: .cancel)
         }
         return UICollectionViewDropProposal(operation: .move, intent: .unspecified)
     }
-}
-extension SeatEditViewController: UICollectionViewDragDelegate {
-    /// ドラッグ時
-    public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        CommonLog.LOG(massege: CommonLogMassege.SEATDRAGSTART)
-        // 座席行・列表示欄選択時は何もしない
-        if indexPath.section == 0 || indexPath.row == 0 {
-            return []
+    // ドロップ確定時
+    public func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        // ドロップ中のビュー
+        guard let dragView = interaction.view else {
+            return
         }
-        // 選択した座席の画像をプレゼンターに依頼
-        guard let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row) else {
-            return []
+        // ドロップ中のビューの座標を取得
+        let dragPoint = session.location(in: dragView)
+        // ドロップ中のビューの特定
+        guard let selectView = dragView.hitTest(dragPoint, with: nil)  else {
+            return
         }
-        // 選択したセルが顧客の席以外の場合何もしない
-        switch seatImage {
-        case .passCell:
-            return []
-        case .seat:
-            return []
-        case .leftCell:
-            return []
-        case .topCell:
-            return []
-        default:
-            // 選択した座席に既に顧客がいる場合、ドラッグ
-            if let seat = UIImage(named: seatImage.imageName) {
-                let itemProvider = NSItemProvider(object: seat)
-                let dragItem = UIDragItem(itemProvider: itemProvider)
-                return [dragItem]
+        // ドロップ中のビューを座席ビューと比較
+        contentsView.seatContentViews.enumerated().forEach { row, views in
+            views.enumerated().forEach { column, seatView in
+                // 座席ビューと一致した場合、座席にあるビューにドロップ
+                if seatView == selectView {
+                    // ドロップした座席ビューの要素番号を取得
+                    /*
+                    要素番号にプラス１をしている理由は、
+                    FlightModelの配列は座席行・列表示欄及び座席表示欄を全て含むのに対し、
+                    contentsView.seatContentViewsは座席表示欄しか含まないため
+                    */
+                    let destinationIndexPath = IndexPath(row: column + 1, section: row + 1)
+                    // ドラッグした座席ビューの要素番号を取得
+                    let sourceIndexPath = IndexPath(row: seatColumn + 1, section: seatRow + 1)
+                    // ドロップ後、FlightModelのデータを書き換える
+                    self.presenter?.resetCellInfo(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
+                }
             }
         }
-
-        return []
+        // ドロップ後の座席画像とテキストを取得
+        let seatNumber = self.presenter?.getAllSeatNumber() ?? [[CellType.passCell]]
+        let seatName = self.presenter?.getAllSeatName() ?? [[Common.NOCUTMERNAME]]
+        // 座席の画像とテキストを設定
+        contentsView.setContent(seatNumber: seatNumber, seatName: seatName)
+        // 編集したことを保存
+        self.changeSeat = true
+        CommonLog.LOG(massege: CommonLogMassege.SEATDROP)
     }
 }

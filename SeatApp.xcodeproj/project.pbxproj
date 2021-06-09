@@ -14,6 +14,7 @@
 		FF348EAA265AA059007C7ECB /* FlightItemNumberCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FF348EA8265AA059007C7ECB /* FlightItemNumberCollectionViewCell.xib */; };
 		FF348EAC265AB4D3007C7ECB /* SeatEditPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF348EAB265AB4D3007C7ECB /* SeatEditPresenter.swift */; };
 		FF36171C266662B600D770E4 /* Thumbs.db in Resources */ = {isa = PBXBuildFile; fileRef = FF36171B266662B600D770E4 /* Thumbs.db */; };
+		FF36175A266A0D1200D770E4 /* CustumContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF361759266A0D1200D770E4 /* CustumContentsView.swift */; };
 		FF378653265272920000CA55 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF378652265272920000CA55 /* UIImageViewExtension.swift */; };
 		FF6A8126265C50AA00102BA9 /* FlightSelectionPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6A8125265C50AA00102BA9 /* FlightSelectionPresenterTests.swift */; };
 		FF733FAC265777A300F6003A /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF733FAB265777A300F6003A /* UIColorExtension.swift */; };
@@ -75,6 +76,7 @@
 		FF348EA8265AA059007C7ECB /* FlightItemNumberCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlightItemNumberCollectionViewCell.xib; sourceTree = "<group>"; };
 		FF348EAB265AB4D3007C7ECB /* SeatEditPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeatEditPresenter.swift; sourceTree = "<group>"; };
 		FF36171B266662B600D770E4 /* Thumbs.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Thumbs.db; sourceTree = "<group>"; };
+		FF361759266A0D1200D770E4 /* CustumContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustumContentsView.swift; sourceTree = "<group>"; };
 		FF378652265272920000CA55 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		FF6A8125265C50AA00102BA9 /* FlightSelectionPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightSelectionPresenterTests.swift; sourceTree = "<group>"; };
 		FF733FAB265777A300F6003A /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				FF8918BE2654D20100BB6A31 /* CollectionViewLayout.swift */,
+				FF361759266A0D1200D770E4 /* CustumContentsView.swift */,
 			);
 			path = CommonCollectionViewLayout;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				FFAF77FD2656CFB200034853 /* FlightSeatPresenter.swift in Sources */,
 				FFBB99C3264D175E007CB71A /* AppDelegate.swift in Sources */,
 				FFBB99C5264D175E007CB71A /* SceneDelegate.swift in Sources */,
+				FF36175A266A0D1200D770E4 /* CustumContentsView.swift in Sources */,
 				FF348EA9265AA059007C7ECB /* FlightItemNumberCollectionViewCell.swift in Sources */,
 				FF733FAE265A44CE00F6003A /* FlightSelectionViewController.swift in Sources */,
 				FFBB99FA264D1E76007CB71A /* FlightSeatViewController.swift in Sources */,

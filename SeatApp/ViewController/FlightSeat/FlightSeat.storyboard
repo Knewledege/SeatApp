@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="P19-qO-e43">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="ipad12_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -12,32 +12,32 @@
             <objects>
                 <viewController storyboardIdentifier="FlightSeatViewController" id="P19-qO-e43" customClass="FlightSeatViewController" customModule="SeatApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Y8o-Pa-Cec">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CrL-nm-cwz">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <collectionViewLayout key="collectionViewLayout" id="MIW-iI-oqP"/>
-                                <cells/>
-                            </collectionView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="TopLeft" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TZs-YP-oST">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <color key="backgroundColor" red="0.54827052389999997" green="0.78935265720000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <viewLayoutGuide key="contentLayoutGuide" id="jpD-hS-0tC"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="tAm-KG-wjq"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="CrL-nm-cwz" firstAttribute="trailing" secondItem="Vvg-e8-ssf" secondAttribute="trailing" id="7vm-cj-NPV"/>
-                            <constraint firstItem="CrL-nm-cwz" firstAttribute="leading" secondItem="Vvg-e8-ssf" secondAttribute="leading" id="J4a-Kc-QFb"/>
-                            <constraint firstItem="CrL-nm-cwz" firstAttribute="top" secondItem="Vvg-e8-ssf" secondAttribute="top" id="gG0-eN-snA"/>
-                            <constraint firstAttribute="bottom" secondItem="CrL-nm-cwz" secondAttribute="bottom" constant="34" id="i1T-ny-ojA"/>
+                            <constraint firstItem="TZs-YP-oST" firstAttribute="trailing" secondItem="Vvg-e8-ssf" secondAttribute="trailing" id="3Ku-qk-Jpo"/>
+                            <constraint firstItem="TZs-YP-oST" firstAttribute="bottom" secondItem="Vvg-e8-ssf" secondAttribute="bottom" id="9kI-Gj-OG8"/>
+                            <constraint firstItem="TZs-YP-oST" firstAttribute="leading" secondItem="Vvg-e8-ssf" secondAttribute="leading" id="WtU-0g-TGa"/>
+                            <constraint firstItem="TZs-YP-oST" firstAttribute="top" secondItem="Vvg-e8-ssf" secondAttribute="top" id="zB5-5H-aS0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Vvg-e8-ssf"/>
                     </view>
                     <connections>
-                        <outlet property="flightSeatCollectionView" destination="CrL-nm-cwz" id="cRZ-Xf-yIK"/>
+                        <outlet property="seatScrollView" destination="TZs-YP-oST" id="Ln4-U3-rK8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="niu-KD-f1H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="131.8840579710145" y="11.383928571428571"/>
+            <point key="canvasLocation" x="131.8359375" y="10.980966325036603"/>
         </scene>
     </scenes>
 </document>

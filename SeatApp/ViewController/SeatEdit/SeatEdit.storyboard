@@ -15,24 +15,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="h8E-bR-Svs">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8R6-88-gIF">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <collectionViewLayout key="collectionViewLayout" id="6Zo-HF-Aqk"/>
-                                <cells/>
-                            </collectionView>
+                                <viewLayoutGuide key="contentLayoutGuide" id="l8V-Bn-StX"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="S7Y-kS-1tP"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="h8E-bR-Svs" firstAttribute="leading" secondItem="hem-Et-Ahf" secondAttribute="leading" id="CwV-sq-wvF"/>
-                            <constraint firstItem="h8E-bR-Svs" firstAttribute="top" secondItem="hem-Et-Ahf" secondAttribute="top" id="QY2-B3-raO"/>
-                            <constraint firstAttribute="bottom" secondItem="h8E-bR-Svs" secondAttribute="bottom" constant="34" id="VCk-oN-06y"/>
-                            <constraint firstItem="h8E-bR-Svs" firstAttribute="trailing" secondItem="hem-Et-Ahf" secondAttribute="trailing" id="zy2-ti-8zz"/>
+                            <constraint firstItem="8R6-88-gIF" firstAttribute="top" secondItem="hem-Et-Ahf" secondAttribute="top" id="UKR-vO-key"/>
+                            <constraint firstItem="8R6-88-gIF" firstAttribute="bottom" secondItem="hem-Et-Ahf" secondAttribute="bottom" id="ffw-YX-qcm"/>
+                            <constraint firstItem="8R6-88-gIF" firstAttribute="trailing" secondItem="hem-Et-Ahf" secondAttribute="trailing" id="iIV-GE-GX6"/>
+                            <constraint firstItem="8R6-88-gIF" firstAttribute="leading" secondItem="hem-Et-Ahf" secondAttribute="leading" id="uoE-aa-5TM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hem-Et-Ahf"/>
                     </view>
                     <connections>
-                        <outlet property="seatEditCollectionView" destination="h8E-bR-Svs" id="L4M-Qm-61I"/>
+                        <outlet property="seatEditScrollView" destination="8R6-88-gIF" id="gSm-wK-JbH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sad-cD-6Nj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

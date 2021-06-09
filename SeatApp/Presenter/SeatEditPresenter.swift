@@ -16,9 +16,12 @@ protocol SeatEditInput {
     func getSeatRow(id: Int) -> Int
     /// セル画像名取得
     func getSeatNumber(section: Int, row: Int) -> CellType
+    /// 座席表示画像名全取得
+    func getAllSeatNumber() -> [[CellType]]
     /// セル表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String
-    /// セル再設定
+    /// 座席表示テキスト全取得
+    func getAllSeatName() -> [[String]]
     func resetCellInfo(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath)
     /// 顧客情報更新
     func updateSeatData()
@@ -92,5 +95,13 @@ extension SeatEditPresenter: SeatEditInput {
             }
             self.delegate?.updateCustomerResultAlert(title: title)
         }
+    }
+    /// 座席表示画像名全取得
+    func getAllSeatNumber() -> [[CellType]] {
+        self.model?.seatImage ?? [[CellType.passCell]]
+    }
+    /// 座席表示テキスト全取得
+    func getAllSeatName() -> [[String]] {
+        self.model?.customerName ?? [[Common.NOCUTMERNAME]]
     }
 }

@@ -7,14 +7,13 @@
 //
 import UIKit
 public class FlightSeatViewController: UIViewController {
-    // 座席行表示欄、座席列表示欄、座席表示欄　用コレクションビュー
-    @IBOutlet private weak var flightSeatCollectionView: UICollectionView!
+    @IBOutlet private weak var seatScrollView: UIScrollView!
     // プレゼンター
     private var presenter: FlightSeatInput?
     // 便ID
     internal var flightID: Int = 0
     // セルカスタムレイアウト
-    let layout = CollectionViewLayout()
+    private let contentsView = CustumContentsView()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -24,23 +23,25 @@ public class FlightSeatViewController: UIViewController {
         presenter?.getFlightName(id: flightID)
         // 座席編集ボタン設定
         setRightBarButtonItem()
-        // セルの横幅設定
-        layout.cellWidth = (UIScreen.main.bounds.width - 30) / (CGFloat(self.presenter?.getSeatColumn() ?? 0) - 1)
-        // セルのカスタムレイアウト指定
-        flightSeatCollectionView.collectionViewLayout = layout
-        flightSeatCollectionView.register(UINib(nibName: FlightSeatCollectionViewCell.className, bundle: nil), forCellWithReuseIdentifier: FlightSeatCollectionViewCell.className)
-        flightSeatCollectionView.register(UINib(nibName: FlightItemNumberCollectionViewCell.className, bundle: nil), forSupplementaryViewOfKind: FlightItemNumberCollectionViewCell.className, withReuseIdentifier: FlightItemNumberCollectionViewCell.className)
-        flightSeatCollectionView.dataSource = self
-        // 拡大縮小用　ジャスチャー設定
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchCell))
-        flightSeatCollectionView.addGestureRecognizer(pinch)
+
+        seatScrollView.delegate = self
+        seatScrollView.maximumZoomScale = 8.0
+        seatScrollView.minimumZoomScale = 1.0
+
+        contentsView.contentViewConfigure(seatRows: self.presenter?.getSeatRow(id: flightID) ?? 0, seatColumns: self.presenter?.getSeatColumn() ?? 0, screenWidth: UIScreen.main.bounds.width)
+
+        seatScrollView.addSubview(contentsView.contentView)
+
+        seatScrollView.contentSize = contentsView.seatViewContentSize
     }
      override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         CommonLog.LOG(massege: "")
         // 便名をプレゼンターに依頼
         presenter?.getFlightName(id: flightID)
-        self.flightSeatCollectionView.reloadData()
+        let seatNumber = self.presenter?.getAllSeatNumber() ?? [[CellType.passCell]]
+        let seatName = self.presenter?.getAllSeatName() ?? [[Common.NOCUTMERNAME]]
+        contentsView.setContent(seatNumber: seatNumber, seatName: seatName)
     }
     override public func viewWillLayoutSubviews() {
        CommonLog.LOG(massege: "")
@@ -72,12 +73,6 @@ public class FlightSeatViewController: UIViewController {
          editBarItem.constraintsConfigure(widthCnstant: 100, heightConstant: 30)
          self.navigationItem.rightBarButtonItem = editBarItem
      }
-    /// セル拡大縮小ジャスチャー検知時
-    @objc
-    private func pinchCell(_ sender: UIPinchGestureRecognizer) {
-        layout.cellWidth = (layout.cellWidth * sender.scale)
-        flightSeatCollectionView.reloadData()
-    }
     /// 便名表示　ボタン押下時
     /// 便選択画面へ遷移
     @objc
@@ -101,66 +96,22 @@ extension FlightSeatViewController: FlightSeatOutput {
         self.navigationItem.leftBarButtonItem = backButton
     }
 }
-// MARK: - UICollectionViewDataSource
-extension FlightSeatViewController: UICollectionViewDataSource {
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // 座席行数をプレゼンターに取得依頼
-        return self.presenter?.getSeatRow(id: flightID) ?? 0
+extension FlightSeatViewController: UIScrollViewDelegate {
+    /// ズーム対象を設定
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        contentsView.contentView
     }
-
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // 座席列数をプレゼンターに取得依頼
-        return self.presenter?.getSeatColumn() ?? 0
-    }
-    /// 座席表示欄　セル設定
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FlightSeatCollectionViewCell.className, for: indexPath) as? FlightSeatCollectionViewCell else {
-            return UICollectionViewCell()
+    /// ズームしたら座席行・列表示欄を端に固定
+    /// scrollView.zoomScaleで割ってる理由は拡大縮小際の比率を与えないと、スクロール量にズレが生じるため
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y / scrollView.zoomScale
+        let offsetX = scrollView.contentOffset.x / scrollView.zoomScale
+        contentsView.dummyView.frame.origin = CGPoint(x: offsetX, y: offsetY)
+        contentsView.topContentViews.forEach { topContent in
+            topContent.frame.origin.y = offsetY
         }
-        // 座席表示画像名　及び　「顧客情報」テーブル「名前」をプレゼンターに取得依頼
-        guard let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row),
-            let seatName = self.presenter?.getSeatName(section: indexPath.section, row: indexPath.row)  else {
-          return cell
+        contentsView.leftContentViews.forEach { leftContent in
+            leftContent.frame.origin.x = offsetX
         }
-        // 座席行・列表示欄　背景緑
-        if indexPath.section == 0 || indexPath.row == 0 {
-            cell.cellBackgroundColor(color: UIColor().mainColorGreen())
-        } else {
-        // 座席表示欄　背景白
-            cell.cellBackgroundColor(color: .white)
-        }
-        // セルの画像設定
-        cell.imageConfigure(type: seatImage)
-        // 顧客名表示ラベル設定
-        cell.rowLabelConfigure(text: seatName)
-
-        return cell
-    }
-    /// 座席行・列表示　セル設定
-    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let supplementaryCell = collectionView.dequeueReusableSupplementaryView(ofKind: FlightItemNumberCollectionViewCell.className, withReuseIdentifier: FlightItemNumberCollectionViewCell.className, for: indexPath) as? FlightItemNumberCollectionViewCell else {
-            return UICollectionReusableView()
-        }
-        // 座席行・列表示欄　の設定
-        if indexPath.section == 0 || indexPath.row == 0 {
-
-            // 座席行・列画像名　及び　行・列数をプレゼンターに取得依頼
-            guard let seatImage = self.presenter?.getSeatNumber(section: indexPath.section, row: indexPath.row),
-                let seatName = self.presenter?.getSeatName(section: indexPath.section, row: indexPath.row)  else {
-                  return supplementaryCell
-            }
-            supplementaryCell.cellBackgroundColor(color: UIColor().mainColorGreen())
-            // セルの画像設定
-            supplementaryCell.imageConfigure(type: seatImage)
-            // 行数表示ラベル設定
-            supplementaryCell.rowLabelConfigure(text: seatName)
-            // 列数表示ラベル設定
-            if indexPath.section == 0 {
-                // アルファベット表記
-                supplementaryCell.columnLabelConfigure(text: seatName)
-            }
-        }
-
-        return supplementaryCell
     }
 }

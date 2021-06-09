@@ -16,8 +16,12 @@ protocol FlightSeatInput {
     func getSeatRow(id: Int) -> Int
     /// セル画像名取得
     func getSeatNumber(section: Int, row: Int) -> CellType
+    /// 座席表示画像名全取得
+    func getAllSeatNumber() -> [[CellType]]
     /// セル表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String
+    /// 座席表示テキスト全取得
+    func getAllSeatName() -> [[String]]
 }
 protocol FlightSeatOutput: AnyObject {
     /// 便名表示　設定
@@ -68,6 +72,14 @@ extension FlightSeatPresenter: FlightSeatInput {
     }
     /// 座席表示テキスト取得
     func getSeatName(section: Int, row: Int) -> String {
-        self.model?.customerName[section][row] ?? "none"
+        self.model?.customerName[section][row] ?? Common.NOCUTMERNAME
+    }
+    /// 座席表示画像名全取得
+    func getAllSeatNumber() -> [[CellType]] {
+        self.model?.seatImage ?? [[CellType.passCell]]
+    }
+    /// 座席表示テキスト全取得
+    func getAllSeatName() -> [[String]] {
+        self.model?.customerName ?? [[Common.NOCUTMERNAME]]
     }
 }

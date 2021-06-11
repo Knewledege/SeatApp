@@ -17,6 +17,14 @@
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8R6-88-gIF">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" id="EKy-3b-EF7" customClass="CustumContentsView" customModule="SeatApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <viewLayoutGuide key="safeArea" id="Wvj-o3-ysE"/>
+                                    </view>
+                                </subviews>
                                 <viewLayoutGuide key="contentLayoutGuide" id="l8V-Bn-StX"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="S7Y-kS-1tP"/>
                             </scrollView>
@@ -31,6 +39,7 @@
                         <viewLayoutGuide key="safeArea" id="hem-Et-Ahf"/>
                     </view>
                     <connections>
+                        <outlet property="customContentView" destination="EKy-3b-EF7" id="TAt-Ht-iPW"/>
                         <outlet property="seatEditScrollView" destination="8R6-88-gIF" id="gSm-wK-JbH"/>
                     </connections>
                 </viewController>

@@ -25,6 +25,8 @@ protocol SeatEditInput {
     func resetCellInfo(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath)
     /// 顧客情報更新
     func updateSeatData()
+    /// 顧客が席を移動したかどうか
+    func getCustomerChengeSeat() -> Bool
 }
 protocol SeatEditOutput: AnyObject {
     /// 便名表示　設定
@@ -103,5 +105,9 @@ extension SeatEditPresenter: SeatEditInput {
     /// 座席表示テキスト全取得
     func getAllSeatName() -> [[String]] {
         self.model?.customerName ?? [[Common.NOCUTMERNAME]]
+    }
+    /// 顧客が席を移動したかどうか
+    func getCustomerChengeSeat() -> Bool {
+        self.model?.customerDataDidChangeResult() ?? false
     }
 }

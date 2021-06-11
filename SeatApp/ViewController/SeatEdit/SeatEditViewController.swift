@@ -11,14 +11,12 @@ import UIKit
 public class SeatEditViewController: UIViewController {
     // 座席行表示欄、座席列表示欄、座席表示欄　用コレクションビュー
     @IBOutlet private weak var seatEditScrollView: UIScrollView!
+    // カスタムレイアウト
+    @IBOutlet private weak var customContentView: CustumContentsView!
     // プレゼンター
     private var presenter: SeatEditInput?
     // 便ID
     internal var flightID: Int = 0
-    // 座席編集痕跡判定
-    private var changeSeat = false
-    // カスタムレイアウト
-    private let contentsView = CustumContentsView()
     // 変更前の座席ビューのrow
     private var seatRow = 0
     // 変更前の座席ビューのcolumn
@@ -37,21 +35,20 @@ public class SeatEditViewController: UIViewController {
         seatEditScrollView.maximumZoomScale = 8.0
         seatEditScrollView.minimumZoomScale = 1.0
         // スクロールビューに配置するビューの生成
-        contentsView.contentViewConfigure(seatRows: self.presenter?.getSeatRow(id: flightID) ?? 0, seatColumns: self.presenter?.getSeatColumn() ?? 0, screenWidth: UIScreen.main.bounds.width)
-        // スクロールビューにUIViewを追加
-        seatEditScrollView.addSubview(contentsView.contentView)
-        seatEditScrollView.contentSize = contentsView.seatViewContentSize
+        customContentView.contentViewConfigure(seatRows: self.presenter?.getSeatRow(id: flightID) ?? 0, seatColumns: self.presenter?.getSeatColumn() ?? 0, screenWidth: UIScreen.main.bounds.width)
+
+        seatEditScrollView.contentSize = customContentView.seatViewContentSize
         // 座席行・列表示欄、座席表示欄の全画像を取得
         let seatNumber = self.presenter?.getAllSeatNumber() ?? [[CellType.passCell]]
         // 座席行・列表示欄、座席表示欄の全テキストを取得
         let seatName = self.presenter?.getAllSeatName() ?? [[Common.NOCUTMERNAME]]
         // 座席行・列表示欄、座席表示欄の画像とテキストを設定
-        contentsView.setContent(seatNumber: seatNumber, seatName: seatName)
+        customContentView.setContent(seatNumber: seatNumber, seatName: seatName)
         // ドロップ&ドラッグ　デリゲート設定
         let dragDelegate: UIDragInteractionDelegate = self
         let dropDelegate: UIDropInteractionDelegate = self
         // ドロップ&ドラッグ　デリゲートを全座席に設定
-        contentsView.addDragDropIntaraction(dragInteractionDelegate: dragDelegate, dropInteractionDelegate: dropDelegate)
+        customContentView.addDragDropIntaraction(dragInteractionDelegate: dragDelegate, dropInteractionDelegate: dropDelegate)
     }
     override public func viewWillAppear(_ animated: Bool) {
         if #available(iOS 13.0, *) {
@@ -108,7 +105,7 @@ public class SeatEditViewController: UIViewController {
     private func doneEdit() {
         CommonLog.LOG(massege: CommonLogMassege.DONEEDITBUTTON)
         //　座席編集をしていたら
-        if self.changeSeat {
+        if self.presenter?.getCustomerChengeSeat() ?? false {
             let alert = UIAlertController(title: "座席を決定してよろしいですか？", message: "", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "はい", style: .default) { _ in
                 // 顧客情報更新をプレゼンターに依頼
@@ -127,7 +124,7 @@ public class SeatEditViewController: UIViewController {
     private func cancelEdit() {
         CommonLog.LOG(massege: CommonLogMassege.CANCELSEATEDITBUTTON)
         // 座席を編集していた場合
-        if self.changeSeat {
+        if self.presenter?.getCustomerChengeSeat() ?? false {
             let alert = UIAlertController(title: "座席の編集を破棄しますがよろしいですか？", message: "", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "はい", style: .default) { _ in
                 self.navigationController?.popViewController(animated: true)
@@ -164,18 +161,18 @@ extension SeatEditViewController: SeatEditOutput {
 extension SeatEditViewController: UIScrollViewDelegate {
     /// ズーム対象を設定
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        contentsView.contentView
+        customContentView
     }
     /// ズームしたら座席行・列表示欄を端に固定
     /// scrollView.zoomScaleで割ってる理由は拡大縮小際の比率を与えないと、スクロール量にズレが生じるため
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y / scrollView.zoomScale
         let offsetX = scrollView.contentOffset.x / scrollView.zoomScale
-        contentsView.dummyView.frame.origin = CGPoint(x: offsetX, y: offsetY)
-        contentsView.topContentViews.forEach { topContent in
+        customContentView.dummyView.frame.origin = CGPoint(x: offsetX, y: offsetY)
+        customContentView.topContentViews.forEach { topContent in
             topContent.frame.origin.y = offsetY
         }
-        contentsView.leftContentViews.forEach { leftContent in
+        customContentView.leftContentViews.forEach { leftContent in
             leftContent.frame.origin.x = offsetX
         }
     }
@@ -196,16 +193,16 @@ extension SeatEditViewController: UIDragInteractionDelegate {
             return []
         }
         // ドラッグ中のビューを座席ビューと比較
-        contentsView.seatContentViews.enumerated().forEach { row, views in
+        customContentView.seatContentViews.enumerated().forEach { row, views in
             views.enumerated().forEach { column, seatView in
                 // 座席ビューと一致した場合、座席にあるビューをドラッグしている
                 if seatView == selectView {
                     // 一致した際のrow,columnを使って座席に設定しているテキストを取得
-                    let text = contentsView.seatContentCustomerNameLabels[row][column].text ?? ""
+                    let text = customContentView.seatContentCustomerNameLabels[row][column].text ?? ""
                     // 座席のテキストが設定されている場合、ドラッグしているビューは顧客の席のためドラッグ可能とする
                     if !text.isEmpty {
                         // ドラッグする画像を設定
-                        seatImage = contentsView.seatContentImages[row][column].image
+                        seatImage = customContentView.seatContentImages[row][column].image
                         // ドラッグする座席の要素番号を保存、ドロップ時に使用
                         seatRow = row
                         seatColumn = column
@@ -238,14 +235,14 @@ extension SeatEditViewController: UIDropInteractionDelegate {
             return UICollectionViewDropProposal(operation: .cancel)
         }
         // ドロップ中のビューを座席ビューと比較
-        contentsView.seatContentViews.enumerated().forEach { row, views in
+        customContentView.seatContentViews.enumerated().forEach { row, views in
             views.enumerated().forEach { column, seatView in
                 // 座席ビューと一致した場合、座席にあるビューにドロップしている
                 if seatView == selectView {
                     // 一致した際のrow,columnを使って座席に設定しているテキストを取得
-                    let text = contentsView.seatContentCustomerNameLabels[row][column].text ?? ""
+                    let text = customContentView.seatContentCustomerNameLabels[row][column].text ?? ""
                     // 一致した際のrow,columnを使って座席に設定している画像を取得
-                    let image = contentsView.seatContentImages[row][column].image
+                    let image = customContentView.seatContentImages[row][column].image
                     // 座席のテキストが空白且つ画像が設定されてるなら空席のためドロップ可能
                     // それ以外は既に顧客がいるか通路のためドロップできない
                     if text.isEmpty && image != nil {
@@ -272,7 +269,7 @@ extension SeatEditViewController: UIDropInteractionDelegate {
             return
         }
         // ドロップ中のビューを座席ビューと比較
-        contentsView.seatContentViews.enumerated().forEach { row, views in
+        customContentView.seatContentViews.enumerated().forEach { row, views in
             views.enumerated().forEach { column, seatView in
                 // 座席ビューと一致した場合、座席にあるビューにドロップ
                 if seatView == selectView {
@@ -280,7 +277,7 @@ extension SeatEditViewController: UIDropInteractionDelegate {
                     /*
                     要素番号にプラス１をしている理由は、
                     FlightModelの配列は座席行・列表示欄及び座席表示欄を全て含むのに対し、
-                    contentsView.seatContentViewsは座席表示欄しか含まないため
+                    customContentView.seatContentViewsは座席表示欄しか含まないため
                     */
                     let destinationIndexPath = IndexPath(row: column + 1, section: row + 1)
                     // ドラッグした座席ビューの要素番号を取得
@@ -294,9 +291,7 @@ extension SeatEditViewController: UIDropInteractionDelegate {
         let seatNumber = self.presenter?.getAllSeatNumber() ?? [[CellType.passCell]]
         let seatName = self.presenter?.getAllSeatName() ?? [[Common.NOCUTMERNAME]]
         // 座席の画像とテキストを設定
-        contentsView.setContent(seatNumber: seatNumber, seatName: seatName)
-        // 編集したことを保存
-        self.changeSeat = true
+        customContentView.setContent(seatNumber: seatNumber, seatName: seatName)
         CommonLog.LOG(massege: CommonLogMassege.SEATDROP)
     }
 }

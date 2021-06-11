@@ -34,8 +34,7 @@ class CustumContentsView: UIView {
     internal var seatContentCustomerNameLabels = [[UILabel]]()
     // 左上の余白用ビュー
     internal var dummyView = UIView()
-    // スクロールビュー表示用
-    internal var contentView = UIView()
+
     private var seatColumns: Int = 0
     private var seatRows: Int = 0
     // 座席列表示欄　高さ
@@ -117,29 +116,29 @@ class CustumContentsView: UIView {
         seatContentViewAutoLayoutConfigure()
         topContentViews.forEach { view in
             // スクロール表示用に追加
-            contentView.addSubview(view)
+            self.addSubview(view)
             // 座席列表示ビューのzindexを前面に
-            contentView.bringSubviewToFront(view)
+            self.bringSubviewToFront(view)
         }
         leftContentViews.forEach { view in
             // スクロール表示用に追加
-            contentView.addSubview(view)
+            self.addSubview(view)
             // 座席行表示ビューのzindexを前面に
-            contentView.bringSubviewToFront(view)
+            self.bringSubviewToFront(view)
         }
         seatContentViews.forEach { views in
             views.forEach { view in
                 // スクロール表示用に追加
-                contentView.addSubview(view)
+                self.addSubview(view)
                 // 座席表示ビューのzindexを背面に
-                contentView.sendSubviewToBack(view)
+                self.sendSubviewToBack(view)
             }
         }
         // スクロール表示用に追加
-        contentView.addSubview(dummyView)
+        self.addSubview(dummyView)
         // 左上の余白ビューのzindexを前面に
-        contentView.bringSubviewToFront(dummyView)
-        contentView.frame.size = seatViewContentSize
+        self.bringSubviewToFront(dummyView)
+        self.frame.size = seatViewContentSize
     }
     /// 座席列表示ビュー　フレーム設定
     private func topContentViewFrameConfigure() {

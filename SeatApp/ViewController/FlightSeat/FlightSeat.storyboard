@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="P19-qO-e43">
-    <device id="ipad12_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -12,12 +11,20 @@
             <objects>
                 <viewController storyboardIdentifier="FlightSeatViewController" id="P19-qO-e43" customClass="FlightSeatViewController" customModule="SeatApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Y8o-Pa-Cec">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="TopLeft" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TZs-YP-oST">
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
-                                <color key="backgroundColor" red="0.54827052389999997" green="0.78935265720000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" id="g7q-cg-qKv" customClass="CustumContentsView" customModule="SeatApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <viewLayoutGuide key="safeArea" id="REd-Ib-G9Z"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <viewLayoutGuide key="contentLayoutGuide" id="jpD-hS-0tC"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="tAm-KG-wjq"/>
                             </scrollView>
@@ -32,6 +39,7 @@
                         <viewLayoutGuide key="safeArea" id="Vvg-e8-ssf"/>
                     </view>
                     <connections>
+                        <outlet property="customContentView" destination="g7q-cg-qKv" id="A33-vg-tyl"/>
                         <outlet property="seatScrollView" destination="TZs-YP-oST" id="Ln4-U3-rK8"/>
                     </connections>
                 </viewController>

@@ -22,6 +22,8 @@ protocol FlightInput {
     func resetSeatInfo(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath)
     /// 顧客情報更新
     func updateCustomer() -> Bool
+    /// 顧客情報編集有無判定
+    func customerDataDidChangeResult() -> Bool
 
     var flightInfo: [FlightInfo] { get }
     var customerCount: Int { get }
@@ -220,13 +222,29 @@ extension FlightModel: FlightInput {
         // 移動元及び移動先の座席番号取得
         if let sourceSeat = self.seatNumber.first(where: { $0.row == sourceIndexPath.section && $0.column == sourceIndexPath.row })?.seatNumber,
             let destinationSeat = self.seatNumber.first(where: { $0.row == destinationIndexPath.section && $0.column == destinationIndexPath.row })?.seatNumber {
-            self.customers.enumerated().forEach { i, value in
+            self.changeCustomers.enumerated().forEach { i, value in
                 // 移動元の座席番号と同じ顧客を特定
                 if value.seatNumber == sourceSeat {
                     // 移動先の座席番号を設定
                     self.changeCustomers[i].seatNumber = destinationSeat
                 }
             }
+        }
+    }
+    /// 顧客情報編集有無判定
+    func customerDataDidChangeResult() -> Bool {
+        let chengeCustomer = self.customers.indices.filter { index in
+            /*
+             customerは更新前 chengeCustomerは更新後
+             等しく無い座席番号が存在したら編集済みとする
+            */
+            return customers[index].seatNumber != changeCustomers[index].seatNumber
+        }
+        print(chengeCustomer)
+        if chengeCustomer.isEmpty {
+            return false
+        } else {
+            return true
         }
     }
     /// 顧客情報更新

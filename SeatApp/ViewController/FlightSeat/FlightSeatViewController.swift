@@ -8,12 +8,13 @@
 import UIKit
 public class FlightSeatViewController: UIViewController {
     @IBOutlet private weak var seatScrollView: UIScrollView!
+    // カスタムレイアウト
+    @IBOutlet private weak var customContentView: CustumContentsView!
     // プレゼンター
     private var presenter: FlightSeatInput?
     // 便ID
     internal var flightID: Int = 0
     // セルカスタムレイアウト
-    private let contentsView = CustumContentsView()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -28,11 +29,9 @@ public class FlightSeatViewController: UIViewController {
         seatScrollView.maximumZoomScale = 8.0
         seatScrollView.minimumZoomScale = 1.0
 
-        contentsView.contentViewConfigure(seatRows: self.presenter?.getSeatRow(id: flightID) ?? 0, seatColumns: self.presenter?.getSeatColumn() ?? 0, screenWidth: UIScreen.main.bounds.width)
+        customContentView.contentViewConfigure(seatRows: self.presenter?.getSeatRow(id: flightID) ?? 0, seatColumns: self.presenter?.getSeatColumn() ?? 0, screenWidth: UIScreen.main.bounds.width)
 
-        seatScrollView.addSubview(contentsView.contentView)
-
-        seatScrollView.contentSize = contentsView.seatViewContentSize
+        seatScrollView.contentSize = customContentView.seatViewContentSize
     }
      override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -41,7 +40,7 @@ public class FlightSeatViewController: UIViewController {
         presenter?.getFlightName(id: flightID)
         let seatNumber = self.presenter?.getAllSeatNumber() ?? [[CellType.passCell]]
         let seatName = self.presenter?.getAllSeatName() ?? [[Common.NOCUTMERNAME]]
-        contentsView.setContent(seatNumber: seatNumber, seatName: seatName)
+        customContentView.setContent(seatNumber: seatNumber, seatName: seatName)
     }
     override public func viewWillLayoutSubviews() {
        CommonLog.LOG(massege: "")
@@ -99,18 +98,18 @@ extension FlightSeatViewController: FlightSeatOutput {
 extension FlightSeatViewController: UIScrollViewDelegate {
     /// ズーム対象を設定
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        contentsView.contentView
+        customContentView
     }
     /// ズームしたら座席行・列表示欄を端に固定
     /// scrollView.zoomScaleで割ってる理由は拡大縮小際の比率を与えないと、スクロール量にズレが生じるため
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y / scrollView.zoomScale
         let offsetX = scrollView.contentOffset.x / scrollView.zoomScale
-        contentsView.dummyView.frame.origin = CGPoint(x: offsetX, y: offsetY)
-        contentsView.topContentViews.forEach { topContent in
+        customContentView.dummyView.frame.origin = CGPoint(x: offsetX, y: offsetY)
+        customContentView.topContentViews.forEach { topContent in
             topContent.frame.origin.y = offsetY
         }
-        contentsView.leftContentViews.forEach { leftContent in
+        customContentView.leftContentViews.forEach { leftContent in
             leftContent.frame.origin.x = offsetX
         }
     }
